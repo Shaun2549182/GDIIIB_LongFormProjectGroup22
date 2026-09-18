@@ -94,23 +94,26 @@ public class BallController : MonoBehaviour
         // 1. Dynamic Paddle Bounce (steer ball depending on where it hits the paddle)
         if (collision.gameObject.CompareTag("Paddle"))
         {
-            // Calculate offset relative to paddle center (-1 at far left, 0 at center, +1 at far right)
             float hitPoint = transform.position.x - collision.transform.position.x;
             float paddleWidth = collision.collider.bounds.size.x;
             float normalizedHit = Mathf.Clamp(hitPoint / (paddleWidth * 0.5f), -1f, 1f);
 
-            // Calculate bounce vector (e.g., steep angle at edges, vertical in center)
             Vector2 bounceDirection = new Vector2(normalizedHit, 1f).normalized;
             rb.linearVelocity = bounceDirection * initialSpeed;
             return;
         }
 
-        // 2. Prevent Vertical Lockup (stuck bouncing straight up/down near walls)
+        // 2. Prevent Vertical Lockup (uses surface normal so world position doesn't matter)
         if (Mathf.Abs(rb.linearVelocity.x) < 0.8f)
         {
-            // Push inward toward screen center (assuming screen origin is X = 0)
-            float pushDirection = (transform.position.x < 0) ? 1.5f : -1.5f;
-            rb.linearVelocity = new Vector2(pushDirection, rb.linearVelocity.y).normalized * initialSpeed;
+            float normalX = collision.contacts.Length > 0 ? collision.contacts[0].normal.x : 0f;
+
+            // Push away from the wall normal, or push in current move direction if hitting ceiling/floor
+            float pushX = !Mathf.Approximately(normalX, 0f)
+                ? Mathf.Sign(normalX) * 1.5f
+                : (rb.linearVelocity.x >= 0 ? 1.5f : -1.5f);
+
+            rb.linearVelocity = new Vector2(pushX, rb.linearVelocity.y).normalized * initialSpeed;
         }
 
         // 3. Prevent Horizontal Lockup (stuck bouncing side-to-side)
