@@ -15,7 +15,7 @@ public class MenuManager : MonoBehaviour
         
     }
 
-    public void LoadGame()
+    public void Play()
     {
         SceneManager.LoadScene(1);
     }
