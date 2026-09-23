@@ -30,35 +30,19 @@ public class DisplaySceneController : MonoBehaviour
             sentenceDisplayText.text = GameManager.Instance.GetFormattedSentence();
         }
 
-        // 2. Spawn Character visual prefab
+        // 2. Spawn Character visual prefab with Display Phase scale
         string charWord = GameManager.Instance.SelectedCharacterWord;
         if (!string.IsNullOrEmpty(charWord) && characterDisplayAnchor != null)
         {
-            GameObject charPrefab = WordVisualManager.Instance?.GetPrefabForWord(charWord);
-            if (charPrefab != null)
-            {
-                InstantiatePrefabAtAnchor(charPrefab, characterDisplayAnchor);
-            }
+            WordVisualManager.Instance?.SpawnVisualAtAnchor(charWord, WordCategory.Character, characterDisplayAnchor, isDisplayPhase: true);
         }
 
-        // 3. Spawn Place visual prefab
+        // 3. Spawn Place visual prefab with Display Phase scale
         string placeWord = GameManager.Instance.SelectedPlaceWord;
         if (!string.IsNullOrEmpty(placeWord) && placeDisplayAnchor != null)
         {
-            GameObject placePrefab = WordVisualManager.Instance?.GetPrefabForWord(placeWord);
-            if (placePrefab != null)
-            {
-                InstantiatePrefabAtAnchor(placePrefab, placeDisplayAnchor);
-            }
+            WordVisualManager.Instance?.SpawnVisualAtAnchor(placeWord, WordCategory.Place, placeDisplayAnchor, isDisplayPhase: true);
         }
-    }
-
-    private void InstantiatePrefabAtAnchor(GameObject prefab, Transform anchor)
-    {
-        GameObject instance = Instantiate(prefab, anchor);
-        instance.transform.localPosition = Vector3.zero;
-        instance.transform.localRotation = Quaternion.identity;
-        instance.transform.localScale = Vector3.one;
     }
 
     private void OnPlayAgainClicked()

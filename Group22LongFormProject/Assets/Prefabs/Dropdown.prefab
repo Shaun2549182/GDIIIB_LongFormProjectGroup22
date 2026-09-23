@@ -809,7 +809,6 @@ GameObject:
   - component: {fileID: 727182305594401578}
   - component: {fileID: 1540387440267335759}
   - component: {fileID: 71656070303993814}
-  - component: {fileID: 2845482716211301325}
   - component: {fileID: 3169010179388935100}
   m_Layer: 5
   m_Name: Dropdown
@@ -933,18 +932,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_AlphaFadeSpeed: 0.15
---- !u!114 &2845482716211301325
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6645465648927628223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae85812ddd2f25c4792e7452827dacf6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3169010179388935100
 MonoBehaviour:
   m_ObjectHideFlags: 0
