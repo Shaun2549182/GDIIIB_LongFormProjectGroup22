@@ -1,36 +1,59 @@
 using System.Collections;
 using UnityEngine;
-using TMPro; // Optional: for visual timer feedback
+using TMPro;
 
 public class ArcadeTimer : MonoBehaviour
 {
-    [SerializeField] private float arcadeDuration = 30f; // 1 minute
-    [SerializeField] private TextMeshProUGUI timerText;  // Optional UI text element
+    [SerializeField] private float arcadeDuration = 30f;
+    [SerializeField] private TextMeshProUGUI timerText;
 
     private Coroutine timerCoroutine;
 
-    private void OnEnable() => GameManager.OnPhaseChanged += HandlePhaseChanged;
-    private void OnDisable() => GameManager.OnPhaseChanged -= HandlePhaseChanged;
+    private void OnEnable()
+    {
+        GameManager.OnPhaseChanged += HandlePhaseChanged;
+
+        // Catch phase state if component was enabled after the event was dispatched
+        if (GameManager.Instance != null && GameManager.Instance.CurrentPhase == GamePhase.Arcade)
+        {
+            StartTimer();
+        }
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnPhaseChanged -= HandlePhaseChanged;
+        StopTimer();
+    }
 
     private void HandlePhaseChanged(GamePhase newPhase)
     {
         if (newPhase == GamePhase.Arcade)
         {
-            if (timerCoroutine != null) StopCoroutine(timerCoroutine);
-            timerCoroutine = StartCoroutine(RunArcadeTimer());
+            StartTimer();
         }
         else
         {
-            if (timerCoroutine != null) StopCoroutine(timerCoroutine);
-            if (timerText != null) timerText.gameObject.SetActive(false);
+            StopTimer();
         }
+    }
+
+    private void StartTimer()
+    {
+        if (timerCoroutine != null) StopCoroutine(timerCoroutine);
+        if (timerText != null) timerText.gameObject.SetActive(true);
+        timerCoroutine = StartCoroutine(RunArcadeTimer());
+    }
+
+    private void StopTimer()
+    {
+        if (timerCoroutine != null) StopCoroutine(timerCoroutine);
+        if (timerText != null) timerText.gameObject.SetActive(false);
     }
 
     private IEnumerator RunArcadeTimer()
     {
         float timeRemaining = arcadeDuration;
-
-        if (timerText != null) timerText.gameObject.SetActive(true);
 
         while (timeRemaining > 0)
         {
@@ -44,7 +67,7 @@ public class ArcadeTimer : MonoBehaviour
             yield return null;
         }
 
-        // Time expired: Validate collected words before changing phase
-        GameManager.Instance.CompleteArcadePhase();
+        // Time expired: Complete arcade phase
+        GameManager.Instance?.CompleteArcadePhase();
     }
 }

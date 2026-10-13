@@ -45,7 +45,16 @@ public class WordInventory : MonoBehaviour
                 matchingWords.Add(item.wordText);
             }
         }
-
         return matchingWords;
     }
+
+    public void ClearInventory()
+    {
+        // Clear whatever list or collection holds collected words
+        if (CollectedWords != null)
+        {
+            CollectedWords.Clear();
+        }
+    }
+        
 }
