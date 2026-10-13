@@ -16,7 +16,6 @@ public class SentenceSlotUI : MonoBehaviour
         dropdown = GetComponent<TMP_Dropdown>();
         dropdown.interactable = false;
 
-        // Clear Inspector listeners and bind C# selection handler
         dropdown.onValueChanged.RemoveAllListeners();
         dropdown.onValueChanged.AddListener(OnSelectionChanged);
     }
@@ -29,7 +28,6 @@ public class SentenceSlotUI : MonoBehaviour
         slotCategory = category;
         dropdown.interactable = false;
 
-        // If initialized while already in Assembly phase, populate options immediately
         if (GameManager.Instance != null && GameManager.Instance.CurrentPhase == GamePhase.Assembly)
         {
             PopulateDropdownOptions();
@@ -55,7 +53,6 @@ public class SentenceSlotUI : MonoBehaviour
     {
         if (dropdown == null || WordInventory.Instance == null) return;
 
-        // Guard: Do not populate if the slot category has not been assigned yet
         if (slotCategory == WordCategory.Any)
         {
             dropdown.ClearOptions();
@@ -91,7 +88,6 @@ public class SentenceSlotUI : MonoBehaviour
             dropdown.value = 0;
             dropdown.RefreshShownValue();
 
-            // Render scene sprite preview for default selected option (index 0)
             string defaultWord = GetSelectedWord();
             WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, defaultWord);
         }
@@ -105,7 +101,7 @@ public class SentenceSlotUI : MonoBehaviour
         if (isInitializing) return;
 
         string selectedWord = GetSelectedWord();
-        if (!string.IsNullOrEmpty(selectedWord) && selectedWord != "No words found")
+        if (!string.IsNullOrEmpty(selectedWord) && selectedWord != "BLANK")
         {
             WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, selectedWord);
         }

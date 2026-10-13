@@ -9,16 +9,29 @@ public enum WordCategory
 
 public static class SentenceEvents
 {
-    // Fired when a new sentence template is sent to the UI
+    // Events
     public static event Action<string> OnSentenceInit;
-
-    // Fired when LeanTween finishes typing out the sentence and spawning slots
     public static event Action OnSentenceConstructionComplete;
+    public static event Action<WordCategory, string> OnSlotUpdated;
 
-    // Fired whenever the player selects a word inside a slot dropdown
-    public static event Action OnSlotUpdated;
+    // Triggers
+    public static void TriggerSentenceInit(string template)
+    {
+        OnSentenceInit?.Invoke(template);
+    }
 
-    public static void TriggerSentenceInit(string template) => OnSentenceInit?.Invoke(template);
-    public static void TriggerSentenceConstructionComplete() => OnSentenceConstructionComplete?.Invoke();
-    public static void TriggerSlotUpdated() => OnSlotUpdated?.Invoke();
+    public static void TriggerSentenceConstructionComplete()
+    {
+        OnSentenceConstructionComplete?.Invoke();
+    }
+
+    public static void TriggerSlotUpdated(WordCategory category, string word)
+    {
+        OnSlotUpdated?.Invoke(category, word);
+    }
+
+    public static void TriggerSlotUpdated()
+    {
+        OnSlotUpdated?.Invoke(WordCategory.Any, string.Empty);
+    }
 }

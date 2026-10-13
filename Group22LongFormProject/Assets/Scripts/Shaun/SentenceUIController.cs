@@ -11,18 +11,45 @@ public class SentenceUIController : MonoBehaviour
     [SerializeField] private Transform sentenceContainer;
     [SerializeField] private float typeSpeed = 0.05f;
 
-    private void OnEnable() => SentenceEvents.OnSentenceInit += BuildSentence;
-    private void OnDisable() => SentenceEvents.OnSentenceInit -= BuildSentence;
+    [Header("Scene Visual Anchors")]
+    [SerializeField] private Transform characterAnchor;
+    [SerializeField] private Transform placeAnchor;
+
+    private void Awake()
+    {
+        // Re-register local scene anchors to persistent WordVisualManager
+        if (WordVisualManager.Instance != null && characterAnchor != null && placeAnchor != null)
+        {
+            WordVisualManager.Instance.RegisterSceneAnchors(characterAnchor, placeAnchor);
+        }
+    }
+
+    private void OnEnable()
+    {
+        SentenceEvents.OnSentenceInit -= BuildSentence;
+        SentenceEvents.OnSentenceInit += BuildSentence;
+    }
+
+    private void OnDisable()
+    {
+        SentenceEvents.OnSentenceInit -= BuildSentence;
+    }
 
     public void BuildSentence(string template)
     {
-        // Clear existing elements in the container
+        if (WordVisualManager.Instance != null && characterAnchor != null && placeAnchor != null)
+        {
+            WordVisualManager.Instance.RegisterSceneAnchors(characterAnchor, placeAnchor);
+        }
+
+        LeanTween.cancel(gameObject);
+
         foreach (Transform child in sentenceContainer)
         {
+            LeanTween.cancel(child.gameObject);
             Destroy(child.gameObject);
         }
 
-        // Split template text into segments using placeholder tags (e.g., {Character}, {Place})
         string[] parts = Regex.Split(template, @"(\{.*?\})");
         ProcessNextPart(parts, 0);
     }
@@ -43,13 +70,11 @@ public class SentenceUIController : MonoBehaviour
             return;
         }
 
-        // Handle Slot Dropdowns ({Character}, {Place}, etc.)
         if (part.StartsWith("{") && part.EndsWith("}"))
         {
             GameObject slotObj = Instantiate(slotPrefab, sentenceContainer);
             WordCategory category = ParseCategoryFromTag(part);
 
-            // Check root and child objects for SentenceSlotUI component
             SentenceSlotUI slotUI = slotObj.GetComponent<SentenceSlotUI>();
             if (slotUI == null)
             {
@@ -60,15 +85,10 @@ public class SentenceUIController : MonoBehaviour
             {
                 slotUI.InitializeSlot(category);
             }
-            else
-            {
-                Debug.LogError($"[SentenceUIController] SentenceSlotUI component missing on {slotPrefab.name} or its children!");
-            }
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(sentenceContainer as RectTransform);
             ProcessNextPart(parts, index + 1);
         }
-        // Handle Standard Typewritten Text
         else
         {
             GameObject textObj = Instantiate(textSegmentPrefab, sentenceContainer);
@@ -80,12 +100,14 @@ public class SentenceUIController : MonoBehaviour
             LeanTween.value(gameObject, 0f, part.Length, totalDuration)
                 .setOnUpdate((float val) =>
                 {
+                    if (tmpText == null) return;
                     int charCount = Mathf.Clamp(Mathf.FloorToInt(val), 0, part.Length);
                     tmpText.text = part.Substring(0, charCount);
                     LayoutRebuilder.ForceRebuildLayoutImmediate(sentenceContainer as RectTransform);
                 })
                 .setOnComplete(() =>
                 {
+                    if (tmpText == null) return;
                     tmpText.text = part;
                     LayoutRebuilder.ForceRebuildLayoutImmediate(sentenceContainer as RectTransform);
                     ProcessNextPart(parts, index + 1);
@@ -95,7 +117,6 @@ public class SentenceUIController : MonoBehaviour
 
     private WordCategory ParseCategoryFromTag(string tag)
     {
-        // Strip curly braces: "{Character}" -> "Character"
         string cleanTag = tag.Trim('{', '}').Trim();
 
         if (Enum.TryParse<WordCategory>(cleanTag, true, out var category))

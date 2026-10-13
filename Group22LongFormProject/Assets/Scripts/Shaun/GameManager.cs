@@ -29,8 +29,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private string gameOverSceneName = "GameOverScene";
     [SerializeField] private string displaySceneName = "DisplayScene";
 
-    [Header("Sentence Settings")]
-    [SerializeField] private string sentenceTemplate = "In the modern day, {Character} is a {Place}. How {CharAdjective} and {PlaceAdjective}!";
+    [Header("Sentence Templates")]
+    [SerializeField] private string assemblySentenceTemplate = "In the modern day, {Character} is a {Place}.";
+    [SerializeField] private string displaySentenceTemplate = "In the modern day, {Character} is a {Place}. How {CharAdjective} and {PlaceAdjective}!";
 
     [Header("Word Adjective Mappings")]
     [SerializeField]
@@ -39,12 +40,12 @@ public class GameManager : MonoBehaviour
         new WordAdjectiveMapping { word = "Emma", adjective = "Cute" },
         new WordAdjectiveMapping { word = "Ben", adjective = "Cool" },
         new WordAdjectiveMapping { word = "Liam", adjective = "Smart" },
-        new WordAdjectiveMapping { word = "Princess", adjective = "Beautiful" },
         new WordAdjectiveMapping { word = "Officer", adjective = "Strong" },
         new WordAdjectiveMapping { word = "Baker", adjective = "Fluffy" }
     };
 
     private Dictionary<string, string> adjectiveDict;
+    private bool isInitializing = false;
 
     public GamePhase CurrentPhase { get; private set; } = GamePhase.Assembly;
     public string SelectedCharacterWord { get; private set; }
@@ -64,6 +65,52 @@ public class GameManager : MonoBehaviour
         }
 
         InitializeAdjectiveDictionary();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void Start()
+    {
+        // First-time Editor boot check (sceneLoaded doesn't always fire on initial Editor Play)
+        if (SceneManager.GetActiveScene().name == mainGameSceneName && CurrentPhase == GamePhase.Assembly)
+        {
+            InitializeAssemblyPhase();
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == mainGameSceneName)
+        {
+            InitializeAssemblyPhase();
+        }
+    }
+
+    private void InitializeAssemblyPhase()
+    {
+        if (isInitializing) return;
+        isInitializing = true;
+
+        SelectedCharacterWord = string.Empty;
+        SelectedPlaceWord = string.Empty;
+
+        WordInventory.Instance?.ClearInventory();
+        WordVisualManager.Instance?.ClearAllVisuals();
+
+        ChangePhase(GamePhase.Assembly);
+
+        // Uses the clean assembly template WITHOUT the adjective tags
+        SentenceEvents.TriggerSentenceInit(assemblySentenceTemplate);
+
+        isInitializing = false;
     }
 
     private void InitializeAdjectiveDictionary()
@@ -126,7 +173,7 @@ public class GameManager : MonoBehaviour
         string charAdj = GetAdjectiveForWord(charWord, "unique");
         string placeAdj = GetAdjectiveForWord(placeWord, "special");
 
-        string formatted = sentenceTemplate;
+        string formatted = displaySentenceTemplate;
         formatted = formatted.Replace("{Character}", charWord);
         formatted = formatted.Replace("{Place}", placeWord);
         formatted = formatted.Replace("{CharAdjective}", charAdj);
@@ -148,9 +195,6 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        SelectedCharacterWord = string.Empty;
-        SelectedPlaceWord = string.Empty;
-        CurrentPhase = GamePhase.Assembly;
         SceneManager.LoadScene(mainGameSceneName);
     }
 }
