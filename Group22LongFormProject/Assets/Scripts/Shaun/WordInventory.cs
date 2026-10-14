@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 [System.Serializable]
 public struct CollectedWord
@@ -18,20 +18,26 @@ public struct CollectedWord
 public class WordInventory : MonoBehaviour
 {
     public static WordInventory Instance { get; private set; }
-    public static event Action<string, WordCategory> OnWordCollected; // Added event
+    public static event Action<string, WordCategory> OnWordCollected;
 
     public List<CollectedWord> CollectedWords { get; private set; } = new List<CollectedWord>();
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void AddWord(string wordText, WordCategory category)
     {
         CollectedWords.Add(new CollectedWord(wordText, category));
-        OnWordCollected?.Invoke(wordText, category); // Trigger event
+        OnWordCollected?.Invoke(wordText, category);
     }
 
     public List<string> GetWordsByCategory(WordCategory category)
@@ -47,5 +53,18 @@ public class WordInventory : MonoBehaviour
         }
 
         return matchingWords;
+    }
+
+    /// <summary>
+    /// Clears all collected words from the inventory list when transitioning acts or resetting the game state.
+    /// </summary>
+    public void ClearInventory()
+    {
+        if (CollectedWords != null)
+        {
+            CollectedWords.Clear();
+        }
+
+        Debug.Log("[WordInventory] Inventory successfully cleared.");
     }
 }

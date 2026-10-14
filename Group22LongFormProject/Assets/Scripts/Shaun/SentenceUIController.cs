@@ -26,15 +26,6 @@ public class SentenceUIController : MonoBehaviour
 
     public void BuildSentence(string template)
     {
-<<<<<<< Updated upstream
-        // Clear existing elements in the container
-        foreach (Transform child in sentenceContainer)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // Split template text into segments using placeholder tags (e.g., {Character}, {Place})
-=======
         // Cancel active LeanTween animations on this object
         LeanTween.cancel(gameObject);
 
@@ -59,7 +50,6 @@ public class SentenceUIController : MonoBehaviour
         }
 
         // Split template text into segments using placeholder tags ({Character}, {Place}, etc.)
->>>>>>> Stashed changes
         string[] parts = Regex.Split(template, @"(\{.*?\})");
 
         bool reachedFirstSlot = false;
@@ -82,15 +72,10 @@ public class SentenceUIController : MonoBehaviour
             return;
         }
 
-<<<<<<< Updated upstream
-        // Handle Slot Dropdowns ({Character}, {Place}, etc.)
-        if (part.StartsWith("{") && part.EndsWith("}"))
-=======
         // Check if this part is a slot tag (e.g., {Character}, {Place})
         bool isSlotTag = part.StartsWith("{") && part.EndsWith("}");
 
         if (isSlotTag)
->>>>>>> Stashed changes
         {
             reachedFirstSlot = true;
         }
@@ -130,11 +115,7 @@ public class SentenceUIController : MonoBehaviour
             }
             else
             {
-<<<<<<< Updated upstream
-                Debug.LogError($"[SentenceUIController] SentenceSlotUI component missing on {slotPrefab.name} or its children!");
-=======
                 Debug.LogError($"[SentenceUIController] SentenceSlotUI missing on {slotPrefab.name}!");
->>>>>>> Stashed changes
             }
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(targetContainer as RectTransform);

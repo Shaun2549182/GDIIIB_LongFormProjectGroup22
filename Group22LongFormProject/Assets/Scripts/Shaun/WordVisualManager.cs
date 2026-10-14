@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public struct WordVisualMapping
@@ -13,7 +14,7 @@ public class WordVisualManager : MonoBehaviour
 {
     public static WordVisualManager Instance { get; private set; }
 
-    [Header("Main Scene Display Anchors")]
+    [Header("Main Scene Display Anchors (Fallback Inspector References)")]
     [SerializeField] private Transform characterSceneAnchor;
     [SerializeField] private Transform placeSceneAnchor;
 
@@ -39,6 +40,46 @@ public class WordVisualManager : MonoBehaviour
         InitializeDictionary();
     }
 
+    private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
+    private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Clear destroyed visual instance references from previous scene
+        activeInstances.Clear();
+
+        // Relocate visual anchors in newly loaded scene
+        RebindSceneAnchors();
+    }
+
+    /// <summary>
+    /// Searches active scene for anchor objects named "CharacterAnchor" and "PlaceAnchor"
+    /// </summary>
+    public void RebindSceneAnchors()
+    {
+        GameObject charObj = GameObject.Find("CharacterAnchor");
+        if (charObj != null)
+        {
+            characterSceneAnchor = charObj.transform;
+            Debug.Log("[WordVisualManager] Successfully bound 'CharacterAnchor'.");
+        }
+        else
+        {
+            Debug.LogWarning("[WordVisualManager] Failed to find 'CharacterAnchor' in current scene!");
+        }
+
+        GameObject placeObj = GameObject.Find("PlaceAnchor");
+        if (placeObj != null)
+        {
+            placeSceneAnchor = placeObj.transform;
+            Debug.Log("[WordVisualManager] Successfully bound 'PlaceAnchor'.");
+        }
+        else
+        {
+            Debug.LogWarning("[WordVisualManager] Failed to find 'PlaceAnchor' in current scene!");
+        }
+    }
+
     private void InitializeDictionary()
     {
         mappingDict = new Dictionary<string, GameObject>(StringComparer.OrdinalIgnoreCase);
@@ -51,9 +92,6 @@ public class WordVisualManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Fetches the prefab associated with a word string (used by DisplaySceneController).
-    /// </summary>
     public GameObject GetPrefabForWord(string word)
     {
         if (string.IsNullOrEmpty(word)) return null;
@@ -63,31 +101,41 @@ public class WordVisualManager : MonoBehaviour
         return prefab;
     }
 
-    /// <summary>
-    /// Instantiates and displays a sprite preview at the main scene anchor (used by SentenceSlotUI).
-    /// </summary>
     public void UpdateCategoryVisual(WordCategory category, string word)
     {
+        Debug.Log($"[WordVisualManager] UpdateCategoryVisual called for Category: '{category}', Word: '{word}'");
+
         ClearCategoryVisual(category);
 
         Transform targetAnchor = GetAnchorForCategory(category);
-        if (targetAnchor == null || string.IsNullOrEmpty(word) || word == "No words found") return;
+        if (targetAnchor == null)
+        {
+            Debug.LogError($"[WordVisualManager] Aborted: Anchor for '{category}' is NULL or destroyed!");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(word) || word == "No words found")
+        {
+            Debug.LogWarning($"[WordVisualManager] Aborted: Word string is invalid ('{word}').");
+            return;
+        }
 
         GameObject prefab = GetPrefabForWord(word);
-        if (prefab != null)
+        if (prefab == null)
         {
-            GameObject instance = Instantiate(prefab, targetAnchor);
-            instance.transform.localPosition = Vector3.zero;
-            instance.transform.localRotation = Quaternion.identity;
-            instance.transform.localScale = Vector3.one;
-
-            activeInstances[category] = instance;
+            Debug.LogError($"[WordVisualManager] Aborted: No prefab mapping found for word '{word}' in mappingDict! Check exact spelling/casing in Inspector mappings.");
+            return;
         }
+
+        GameObject instance = Instantiate(prefab, targetAnchor);
+        instance.transform.localPosition = Vector3.zero;
+        instance.transform.localRotation = Quaternion.identity;
+        instance.transform.localScale = Vector3.one;
+
+        activeInstances[category] = instance;
+        Debug.Log($"[WordVisualManager] Successfully instantiated '{prefab.name}' under anchor '{targetAnchor.name}'.");
     }
 
-    /// <summary>
-    /// Clears any active visual object assigned to a specific category.
-    /// </summary>
     public void ClearCategoryVisual(WordCategory category)
     {
         if (activeInstances.TryGetValue(category, out GameObject existingObj))
@@ -100,9 +148,6 @@ public class WordVisualManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Clears all active preview instances across all categories.
-    /// </summary>
     public void ClearAllVisuals()
     {
         foreach (var kvp in activeInstances)
@@ -114,6 +159,13 @@ public class WordVisualManager : MonoBehaviour
 
     private Transform GetAnchorForCategory(WordCategory category)
     {
+        // Ensure anchors are bound if null/destroyed
+        if ((category == WordCategory.Character && characterSceneAnchor == null) ||
+            (category == WordCategory.Place && placeSceneAnchor == null))
+        {
+            RebindSceneAnchors();
+        }
+
         switch (category)
         {
             case WordCategory.Character:

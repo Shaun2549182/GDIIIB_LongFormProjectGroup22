@@ -97,14 +97,14 @@ public class LockInButton : MonoBehaviour
 
         Debug.Log($"[LockInButton] Choices locked in — Character: '{chosenCharacter}', Place: '{chosenPlace}'");
 
-        // 3. Pass selections to GameManager and trigger transition to DisplayScene
+        // 3. Pass selections to GameManager
         if (GameManager.Instance != null)
         {
             GameManager.Instance.LockInChoices(chosenCharacter, chosenPlace);
         }
         else
         {
-            Debug.LogError("[LockInButton] GameManager instance missing! Loading DisplayScene directly as fallback.");
+            Debug.LogError("[LockInButton] GameManager instance missing! Loading default display scene fallback.");
             SceneManager.LoadScene("DisplayScene");
         }
     }

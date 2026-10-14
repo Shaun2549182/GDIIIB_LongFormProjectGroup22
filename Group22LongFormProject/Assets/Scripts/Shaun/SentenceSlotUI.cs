@@ -41,8 +41,13 @@ public class SentenceSlotUI : MonoBehaviour
     {
         if (newPhase == GamePhase.Assembly)
         {
+            if (TryGetComponent<TMP_Dropdown>(out var dropdown))
+            {
+                dropdown.gameObject.SetActive(true);
+                dropdown.interactable = true; // Re-enable interactability
+            }
+
             PopulateDropdownOptions();
-            dropdown.interactable = true;
         }
         else
         {

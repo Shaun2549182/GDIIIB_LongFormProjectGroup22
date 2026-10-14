@@ -155,8 +155,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 750, y: -400}
+  m_SizeDelta: {x: 250, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &99731782
 MonoBehaviour:
@@ -274,7 +274,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 200}
+  m_AnchoredPosition: {x: 450, y: -200}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &422838547
@@ -324,8 +324,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -409,12 +409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sentenceDisplayText: {fileID: 422838547}
   characterDisplayAnchor: {fileID: 908723266}
-<<<<<<< Updated upstream
-  placeDisplayAnchor: {fileID: 908723266}
-  playAgainButton: {fileID: 99731782}
-=======
   placeDisplayAnchor: {fileID: 878315956}
->>>>>>> Stashed changes
 --- !u!4 &578964764
 Transform:
   m_ObjectHideFlags: 0
@@ -501,7 +496,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: BEgin act 2
+  m_text: Begin Act 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -528,8 +523,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -685,7 +680,7 @@ Transform:
   m_GameObject: {fileID: 878315955}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5311298, y: -3.1, z: -0.06642317}
+  m_LocalPosition: {x: 0, y: 0, z: -0.06642317}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -716,8 +711,8 @@ Transform:
   m_GameObject: {fileID: 908723265}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.84, y: -3.59, z: -0.06642317}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.84, y: -2.21, z: -1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -825,8 +820,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
-<<<<<<< Updated upstream
-=======
 --- !u!1 &1437094914
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,21 +851,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterSceneAnchor: {fileID: 908723266}
   placeSceneAnchor: {fileID: 878315956}
-  assemblyCharacterScale: {x: 1, y: 1, z: 1}
-  assemblyPlaceScale: {x: 0.6, y: 0.6, z: 1}
-  displayCharacterScale: {x: 15, y: 15, z: 1}
-  displayPlaceScale: {x: 1, y: 1, z: 1}
   mappings:
   - wordText: Emma
-    visualSprite: {fileID: 6630132053238735714, guid: 8075b649af171cf459d08a231916d8e6, type: 3}
+    visualPrefab: {fileID: 0}
   - wordText: Ben
-    visualSprite: {fileID: -6769428290867566633, guid: 11aa28fba2119ee4fa09a26ac5807d8a, type: 3}
+    visualPrefab: {fileID: 0}
   - wordText: Liam
-    visualSprite: {fileID: -7975506639966547020, guid: a2c9a157cc0550642aeedeaefa373fd1, type: 3}
+    visualPrefab: {fileID: 0}
   - wordText: Officer
-    visualSprite: {fileID: -9055752771898117072, guid: 35c066ba2cd61ca418502a7fc1da54bf, type: 3}
+    visualPrefab: {fileID: 0}
   - wordText: Baker
-    visualSprite: {fileID: -5359031613335939112, guid: 4c343dd7ec619894f80fd7c64e1f7feb, type: 3}
+    visualPrefab: {fileID: 0}
 --- !u!4 &1437094916
 Transform:
   m_ObjectHideFlags: 0
@@ -888,7 +877,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> Stashed changes
 --- !u!1 &2033123341
 GameObject:
   m_ObjectHideFlags: 0
@@ -1034,9 +1022,6 @@ SceneRoots:
   - {fileID: 912165697}
   - {fileID: 718717437}
   - {fileID: 578964764}
-<<<<<<< Updated upstream
-  - {fileID: 908723266}
-  - {fileID: 878315956}
-=======
   - {fileID: 1437094916}
->>>>>>> Stashed changes
+  - {fileID: 878315956}
+  - {fileID: 908723266}
