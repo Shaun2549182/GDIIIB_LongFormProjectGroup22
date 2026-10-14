@@ -1,31 +1,27 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class ArcadeLifeManager : MonoBehaviour
 {
-    [Header("References")]
+    [SerializeField] private int startingLives = 3;
+    [SerializeField] private List<GameObject> healthPointObjects;
     [SerializeField] private BallController ballController;
-    [SerializeField] private List<GameObject> healthPointObjects; // Drag your 2 health GameObjects here
 
     private int currentLives;
 
-    private void OnEnable() => GameManager.OnPhaseChanged += HandlePhaseChanged;
-    private void OnDisable() => GameManager.OnPhaseChanged -= HandlePhaseChanged;
-
-    private void HandlePhaseChanged(GamePhase newPhase)
+    private void Start()
     {
-        if (newPhase == GamePhase.Arcade)
+        // Check if current scene is Tutorial
+        bool isTutorial = SceneManager.GetActiveScene().name.IndexOf("Tutorial", System.StringComparison.OrdinalIgnoreCase) >= 0;
+
+        if (isTutorial)
         {
-            ResetLives();
+            currentLives = 999;
         }
-    }
-
-    public void ResetLives()
-    {
-        currentLives = healthPointObjects.Count;
-        foreach (var hpObj in healthPointObjects)
+        else
         {
-            if (hpObj != null) hpObj.SetActive(true);
+            currentLives = startingLives;
         }
     }
 
@@ -33,7 +29,8 @@ public class ArcadeLifeManager : MonoBehaviour
     {
         currentLives--;
 
-        if (currentLives >= 0 && currentLives < healthPointObjects.Count)
+        // Hide UI heart/life icons if within range
+        if (currentLives >= 0 && healthPointObjects != null && currentLives < healthPointObjects.Count)
         {
             if (healthPointObjects[currentLives] != null)
             {
@@ -43,12 +40,13 @@ public class ArcadeLifeManager : MonoBehaviour
 
         if (currentLives <= 0)
         {
-            // Out of lives: Validate collected words before changing phase
-            GameManager.Instance.CompleteArcadePhase();
+            // Out of lives: End Arcade phase
+            GameManager.Instance?.CompleteArcadePhase();
         }
         else
         {
-            ballController.ResetBall();
+            // Reset ball for next attempt
+            ballController?.ResetBall();
         }
     }
 }

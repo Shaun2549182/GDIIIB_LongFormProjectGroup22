@@ -13,9 +13,30 @@ public class Brick : MonoBehaviour
     [SerializeField] private string wordText;
     [SerializeField] private WordCategory wordCategory;
     [SerializeField] private TextMeshPro labelText;
-    [SerializeField] private GameObject fallingWordPrefab; // Pickup prefab reference
+    [SerializeField] private GameObject fallingWordPrefab;
+
+    public BrickType GetBrickType() => brickType;
+    public WordCategory GetCategory() => wordCategory;
+    public string GetWordText() => wordText;
 
     private void OnValidate()
+    {
+        UpdateLabel();
+    }
+
+    /// <summary>
+    /// Configures the brick as a word brick and updates its label at runtime.
+    /// </summary>
+    public void SetWord(string word, WordCategory category)
+    {
+        brickType = BrickType.Word;
+        wordText = word;
+        wordCategory = category;
+        UpdateLabel();
+        gameObject.SetActive(true);
+    }
+
+    private void UpdateLabel()
     {
         if (labelText != null)
         {
@@ -55,5 +76,10 @@ public class Brick : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        ArcadeWordTracker.CheckRemainingWords();
     }
 }

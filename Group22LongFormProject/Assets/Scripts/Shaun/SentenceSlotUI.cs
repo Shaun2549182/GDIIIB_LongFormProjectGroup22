@@ -74,7 +74,7 @@ public class SentenceSlotUI : MonoBehaviour
 
         if (collectedWords == null || collectedWords.Count == 0)
         {
-            dropdown.options.Add(new TMP_Dropdown.OptionData("No words found"));
+            dropdown.options.Add(new TMP_Dropdown.OptionData("BLANK"));
             dropdown.interactable = false;
             WordVisualManager.Instance?.ClearCategoryVisual(slotCategory);
         }

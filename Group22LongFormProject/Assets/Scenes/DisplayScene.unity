@@ -387,6 +387,7 @@ GameObject:
   m_Component:
   - component: {fileID: 578964764}
   - component: {fileID: 578964763}
+  - component: {fileID: 578964765}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -408,8 +409,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sentenceDisplayText: {fileID: 422838547}
   characterDisplayAnchor: {fileID: 908723266}
+<<<<<<< Updated upstream
   placeDisplayAnchor: {fileID: 908723266}
   playAgainButton: {fileID: 99731782}
+=======
+  placeDisplayAnchor: {fileID: 878315956}
+>>>>>>> Stashed changes
 --- !u!4 &578964764
 Transform:
   m_ObjectHideFlags: 0
@@ -425,6 +430,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &578964765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578964762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7324429a890f4734db13a75027b75049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storyText: {fileID: 422838547}
+  continueButton: {fileID: 99731782}
 --- !u!1 &711224783
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,7 +501,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Play Again?
+  m_text: BEgin act 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -806,6 +825,70 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+<<<<<<< Updated upstream
+=======
+--- !u!1 &1437094914
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1437094916}
+  - component: {fileID: 1437094915}
+  m_Layer: 0
+  m_Name: VisualManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1437094915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437094914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3273e7927e1ff454b85eb63f107dfa16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterSceneAnchor: {fileID: 908723266}
+  placeSceneAnchor: {fileID: 878315956}
+  assemblyCharacterScale: {x: 1, y: 1, z: 1}
+  assemblyPlaceScale: {x: 0.6, y: 0.6, z: 1}
+  displayCharacterScale: {x: 15, y: 15, z: 1}
+  displayPlaceScale: {x: 1, y: 1, z: 1}
+  mappings:
+  - wordText: Emma
+    visualSprite: {fileID: 6630132053238735714, guid: 8075b649af171cf459d08a231916d8e6, type: 3}
+  - wordText: Ben
+    visualSprite: {fileID: -6769428290867566633, guid: 11aa28fba2119ee4fa09a26ac5807d8a, type: 3}
+  - wordText: Liam
+    visualSprite: {fileID: -7975506639966547020, guid: a2c9a157cc0550642aeedeaefa373fd1, type: 3}
+  - wordText: Officer
+    visualSprite: {fileID: -9055752771898117072, guid: 35c066ba2cd61ca418502a7fc1da54bf, type: 3}
+  - wordText: Baker
+    visualSprite: {fileID: -5359031613335939112, guid: 4c343dd7ec619894f80fd7c64e1f7feb, type: 3}
+--- !u!4 &1437094916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437094914}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.0085928, y: -0.4239939, z: 2287.6887}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+>>>>>>> Stashed changes
 --- !u!1 &2033123341
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,5 +1034,9 @@ SceneRoots:
   - {fileID: 912165697}
   - {fileID: 718717437}
   - {fileID: 578964764}
+<<<<<<< Updated upstream
   - {fileID: 908723266}
   - {fileID: 878315956}
+=======
+  - {fileID: 1437094916}
+>>>>>>> Stashed changes

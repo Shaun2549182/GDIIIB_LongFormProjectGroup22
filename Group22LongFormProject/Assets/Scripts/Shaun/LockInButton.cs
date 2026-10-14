@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 [RequireComponent(typeof(Button))]
 [RequireComponent(typeof(CanvasGroup))]
@@ -23,11 +25,13 @@ public class LockInButton : MonoBehaviour
 
     private void HandlePhaseChanged(GamePhase newPhase)
     {
+        // Track when player transitions through Arcade
         if (newPhase == GamePhase.Arcade)
         {
             hasCompletedArcade = true;
             HideImmediate();
         }
+        // Reveal only when returning to Assembly after Arcade is finished
         else if (newPhase == GamePhase.Assembly && hasCompletedArcade)
         {
             ShowButton();
@@ -54,24 +58,54 @@ public class LockInButton : MonoBehaviour
 
     private void OnLockInClicked()
     {
-        string characterWord = string.Empty;
-        string placeWord = string.Empty;
+        string currentScene = SceneManager.GetActiveScene().name;
 
-        // Retrieve selections from active slots
+        // 1. If clicked inside the Tutorial scene, transition to GameScene
+        if (currentScene.IndexOf("Tutorial", System.StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            Debug.Log("[LockInButton] Tutorial complete! Transitioning to GameScene.");
+            SceneManager.LoadScene("GameScene");
+            return;
+        }
+
+        // 2. Extract selected choices using SentenceSlotUI methods
+        string chosenCharacter = "";
+        string chosenPlace = "";
+
         SentenceSlotUI[] slots = FindObjectsByType<SentenceSlotUI>(FindObjectsSortMode.None);
         foreach (var slot in slots)
         {
-            if (slot.GetSlotCategory() == WordCategory.Character)
+            WordCategory category = slot.GetSlotCategory();
+            string selectedWord = slot.GetSelectedWord();
+
+            if (category == WordCategory.Character)
             {
-                characterWord = slot.GetSelectedWord();
+                chosenCharacter = selectedWord;
             }
-            else if (slot.GetSlotCategory() == WordCategory.Place)
+            else if (category == WordCategory.Place)
             {
-                placeWord = slot.GetSelectedWord();
+                chosenPlace = selectedWord;
+            }
+
+            if (slot.TryGetComponent<TMP_Dropdown>(out var dropdown))
+            {
+                dropdown.interactable = false;
             }
         }
 
-        Debug.Log($"[LockInButton] Final choices locked in: Character='{characterWord}', Place='{placeWord}'");
-        GameManager.Instance?.LockInChoices(characterWord, placeWord);
+        canvasGroup.interactable = false;
+
+        Debug.Log($"[LockInButton] Choices locked in — Character: '{chosenCharacter}', Place: '{chosenPlace}'");
+
+        // 3. Pass selections to GameManager and trigger transition to DisplayScene
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.LockInChoices(chosenCharacter, chosenPlace);
+        }
+        else
+        {
+            Debug.LogError("[LockInButton] GameManager instance missing! Loading DisplayScene directly as fallback.");
+            SceneManager.LoadScene("DisplayScene");
+        }
     }
 }
