@@ -9,6 +9,11 @@ public class MenuController : MonoBehaviour
         SceneManager.LoadScene("Tutorial");
     }
 
+    public void LoadAct1()
+    {
+        SceneManager.LoadScene("GameScene");
+    }
+
     // Method 2: Quits the game
     public void QuitGame()
     {

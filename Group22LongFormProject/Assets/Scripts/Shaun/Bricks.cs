@@ -14,6 +14,7 @@ public class Brick : MonoBehaviour
     [SerializeField] private WordCategory wordCategory;
     [SerializeField] private TextMeshPro labelText;
     [SerializeField] private GameObject fallingWordPrefab;
+    [SerializeField] private GameObject destroyParticlePrefab;
 
     public BrickType GetBrickType() => brickType;
     public WordCategory GetCategory() => wordCategory;
@@ -64,6 +65,14 @@ public class Brick : MonoBehaviour
 
     private void OnDestroyed()
     {
+        // 1. Spawn Destruction Particle Effect
+        if (destroyParticlePrefab != null)
+        {
+            GameObject particles = Instantiate(destroyParticlePrefab, transform.position, Quaternion.identity);
+            Destroy(particles, 2f); // Automatically removes the particle object from scene after 2 seconds
+        }
+
+        // 2. Spawn Falling Word Pickup (Word Bricks Only)
         if (brickType == BrickType.Word && fallingWordPrefab != null && !string.IsNullOrEmpty(wordText))
         {
             GameObject pickupObj = Instantiate(fallingWordPrefab, transform.position, Quaternion.identity);
@@ -75,6 +84,7 @@ public class Brick : MonoBehaviour
             }
         }
 
+        // 3. Destroy Brick GameObject
         Destroy(gameObject);
     }
 
