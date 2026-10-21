@@ -503,6 +503,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1333223880}
     m_Modifications:
+    - target: {fileID: 4024741383403111068, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 7119354864016397947, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.63
@@ -773,6 +777,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1333223880}
     m_Modifications:
+    - target: {fileID: 4024741383403111068, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 7119354864016397947, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.63
@@ -1073,6 +1081,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1333223880}
     m_Modifications:
+    - target: {fileID: 4024741383403111068, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 7119354864016397947, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.63
@@ -1388,7 +1400,7 @@ GameObject:
   - component: {fileID: 473052080}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1739,6 +1751,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1333223880}
     m_Modifications:
+    - target: {fileID: 4024741383403111068, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 7119354864016397947, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.63
@@ -1912,6 +1928,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1333223880}
     m_Modifications:
+    - target: {fileID: 4024741383403111068, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 7119354864016397947, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.63
@@ -2155,8 +2175,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66d8b0db8a21511439c7316ff7595788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  spriteRenderer: {fileID: 0}
   initialSpeed: 4
   paddleTransform: {fileID: 505751904}
+  defaultColor: {r: 1, g: 0, b: 0, a: 1}
+  liamColor: {r: 1, g: 1, b: 1, a: 1}
+  benColor: {r: 1, g: 0.41, b: 0.71, a: 1}
+  emmaColor: {r: 0.2, g: 0.6, b: 1, a: 1}
+  wallShakeDuration: 0.12
+  wallShakeMagnitude: 0.1
 --- !u!1 &798540925
 GameObject:
   m_ObjectHideFlags: 0
@@ -2481,6 +2509,10 @@ PrefabInstance:
       propertyPath: wordCategory
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5774886367912992045, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 9010791506595001185, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_text
       value: Officer
@@ -2708,6 +2740,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1333223880}
     m_Modifications:
+    - target: {fileID: 4024741383403111068, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 7119354864016397947, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.63
@@ -2799,7 +2835,7 @@ GameObject:
   - component: {fileID: 1083163221}
   m_Layer: 0
   m_Name: Square
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3062,6 +3098,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1333223880}
     m_Modifications:
+    - target: {fileID: 4024741383403111068, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 7119354864016397947, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.63
@@ -4016,6 +4056,10 @@ PrefabInstance:
       propertyPath: wordCategory
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5774886367912992045, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 9010791506595001185, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_text
       value: Princess
@@ -4299,6 +4343,10 @@ PrefabInstance:
       propertyPath: wordCategory
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5774886367912992045, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
+      propertyPath: destroyParticlePrefab
+      value: 
+      objectReference: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
     - target: {fileID: 9010791506595001185, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_text
       value: Ben
@@ -4340,7 +4388,7 @@ GameObject:
   - component: {fileID: 1853497152}
   m_Layer: 0
   m_Name: Boundary3
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4632,7 +4680,7 @@ GameObject:
   - component: {fileID: 2055141108}
   m_Layer: 0
   m_Name: Boundary2
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

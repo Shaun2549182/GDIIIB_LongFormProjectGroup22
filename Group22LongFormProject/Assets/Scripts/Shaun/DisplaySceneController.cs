@@ -11,8 +11,6 @@ public class DisplaySceneController : MonoBehaviour
 
     private void Start()
     {
-
-
         DisplayFinalResult();
     }
 
@@ -23,7 +21,7 @@ public class DisplaySceneController : MonoBehaviour
         // 1. Render final formatted sentence
         if (sentenceDisplayText != null)
         {
-            string sentence = GameManager.Instance.GetDisplayStory();
+            sentenceDisplayText.text = GameManager.Instance.GetDisplayStory();
         }
 
         // 2. Spawn Character visual prefab with Display Phase scale
@@ -41,7 +39,7 @@ public class DisplaySceneController : MonoBehaviour
         }
     }
 
-    private void OnPlayAgainClicked()
+    public void OnPlayAgainClicked()
     {
         GameManager.Instance?.RestartGame();
     }

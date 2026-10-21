@@ -11,10 +11,11 @@ public class BallController : MonoBehaviour
     [SerializeField] private float initialSpeed = 10f;
     [SerializeField] private Transform paddleTransform;
 
-    [Header("Character Colors")]
-    [SerializeField] private Color liamColor = Color.white;
-    [SerializeField] private Color benColor = new Color(1f, 0.41f, 0.71f); // Hot Pink
-    [SerializeField] private Color emmaColor = new Color(0.2f, 0.6f, 1f);   // Bright Blue
+    [Header("Ball Colors")]
+    [SerializeField] private Color defaultColor = Color.red;                 // Default Ball Color (Act 1 / Unselected)
+    [SerializeField] private Color liamColor = Color.white;                  // Liam (White)
+    [SerializeField] private Color benColor = new Color(1f, 0.41f, 0.71f);   // Ben (Hot Pink)
+    [SerializeField] private Color emmaColor = new Color(0.2f, 0.6f, 1f);     // Emma (Bright Blue)
 
     [Header("Juice / Screen Shake")]
     [SerializeField] private float wallShakeDuration = 0.12f;
@@ -25,14 +26,13 @@ public class BallController : MonoBehaviour
     private Vector3 paddleOffset;
     private Vector3 originalScale;
     private float currentSpeed;
-    private Vector2 lastVelocity; // Cache pre-collision velocity to prevent double reflection!
+    private Vector2 lastVelocity;
 
     private void Awake()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // Enable continuous collision detection to prevent tunneling through thin bricks
         if (rb != null)
         {
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
@@ -46,6 +46,12 @@ public class BallController : MonoBehaviour
         {
             paddleOffset = transform.position - paddleTransform.position;
         }
+    }
+
+    private void Start()
+    {
+        // Ensures the ball color updates immediately when scene loads (e.g. entering Act 2)
+        ApplyCharacterModifiers();
     }
 
     private void OnEnable() => GameManager.OnPhaseChanged += HandlePhaseChanged;
@@ -80,7 +86,7 @@ public class BallController : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
         }
 
-        // Apply character color and Act 2 physics/scale changes
+        // Re-apply modifiers & color on ball reset
         ApplyCharacterModifiers();
 
         if (paddleTransform != null)
@@ -94,32 +100,44 @@ public class BallController : MonoBehaviour
         transform.localScale = originalScale;
         currentSpeed = initialSpeed;
 
-        if (GameManager.Instance == null) return;
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
 
-        string activeCharacter = (GameManager.Instance.SelectedCharacterWord ?? "").ToLower().Trim();
-        bool isAct2 = GameManager.Instance.CurrentAct == 2;
+        string activeCharacter = "";
+        bool isAct2 = false;
 
-        // 1. Color assignment (Acts 1 and 2)
+        if (GameManager.Instance != null)
+        {
+            activeCharacter = (GameManager.Instance.SelectedCharacterWord ?? "").ToLower().Trim();
+            isAct2 = GameManager.Instance.CurrentAct == 2;
+        }
+
+        // 1. Color assignment logic
         switch (activeCharacter)
         {
+            case "liam":
+                if (spriteRenderer != null) spriteRenderer.color = liamColor;
+                break;
+
             case "ben":
                 if (spriteRenderer != null) spriteRenderer.color = benColor;
                 break;
+
             case "emma":
                 if (spriteRenderer != null) spriteRenderer.color = emmaColor;
                 break;
-            case "liam":
+
             default:
-                if (spriteRenderer != null) spriteRenderer.color = liamColor;
+                // No character selected yet (Act 1) or unmapped character -> Red
+                if (spriteRenderer != null) spriteRenderer.color = defaultColor;
                 break;
         }
 
-        // 2. Act 2 Character Physics & Scale Modifiers
+        // 2. Act 2 Physics & Scale Modifiers
         if (isAct2)
         {
             switch (activeCharacter)
             {
-                case "liam": // Clumsy: Bigger, faster
+                case "liam": // Clumsy: Faster, bigger
                     currentSpeed *= 1.25f;
                     transform.localScale = originalScale * 1.3f;
                     break;
@@ -142,13 +160,11 @@ public class BallController : MonoBehaviour
 
         if (!isLaunched)
         {
-            // Follow paddle position prior to launch
             if (paddleTransform != null)
             {
                 transform.position = paddleTransform.position + paddleOffset;
             }
 
-            // Space, Click, or Jump button launches ball
             if (Input.GetButtonDown("Jump") || Input.GetMouseButtonDown(0))
             {
                 Launch();
@@ -168,10 +184,8 @@ public class BallController : MonoBehaviour
     {
         if (isActive && isLaunched && rb != null)
         {
-            // Cache pre-collision velocity before physics step resolves
             lastVelocity = rb.linearVelocity;
 
-            // Maintain constant ball speed without changing direction
             if (rb.linearVelocity != Vector2.zero)
             {
                 rb.linearVelocity = rb.linearVelocity.normalized * currentSpeed;
@@ -183,13 +197,11 @@ public class BallController : MonoBehaviour
     {
         if (!isActive || !isLaunched) return;
 
-        // 1. Wall Hit -> Trigger Screen Shake
         if (collision.gameObject.CompareTag("Wall"))
         {
             CameraShake.Instance?.Shake(wallShakeDuration, wallShakeMagnitude);
         }
 
-        // 2. Dynamic Paddle Bounce (steer ball depending on where it hits paddle)
         if (collision.gameObject.CompareTag("Paddle"))
         {
             float hitPoint = transform.position.x - collision.transform.position.x;
@@ -202,15 +214,11 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        // 3. Bricks / Walls Collision -> Calculate clean reflection from PRE-COLLISION velocity
         if (collision.contacts.Length > 0)
         {
             Vector2 normal = collision.contacts[0].normal;
-
-            // Reflect the pre-collision velocity vector off the contact surface normal
             Vector2 reflectDir = Vector2.Reflect(lastVelocity.normalized, normal).normalized;
 
-            // Liam's Act 2 Clumsy Bounce Wobble
             if (GameManager.Instance != null && GameManager.Instance.CurrentAct == 2)
             {
                 string charName = (GameManager.Instance.SelectedCharacterWord ?? "").ToLower().Trim();
@@ -221,7 +229,6 @@ public class BallController : MonoBehaviour
                 }
             }
 
-            // Anti-Wall Hugging & Anti-Lockup (Ejects ball cleanly off side walls)
             float minAngleThreshold = 0.3f;
 
             if (Mathf.Abs(reflectDir.x) < minAngleThreshold)

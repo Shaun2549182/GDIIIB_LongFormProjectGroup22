@@ -103,28 +103,34 @@ public class WordVisualManager : MonoBehaviour
 
     public void UpdateCategoryVisual(WordCategory category, string word)
     {
-        Debug.Log($"[WordVisualManager] UpdateCategoryVisual called for Category: '{category}', Word: '{word}'");
+        Transform targetAnchor = GetAnchorForCategory(category);
+        SpawnVisualAtAnchor(word, category, targetAnchor);
+    }
 
+    /// <summary>
+    /// Spawns a word visual prefab under a specific anchor transform.
+    /// </summary>
+    public GameObject SpawnVisualAtAnchor(string word, WordCategory category, Transform targetAnchor, bool isDisplayPhase = false)
+    {
         ClearCategoryVisual(category);
 
-        Transform targetAnchor = GetAnchorForCategory(category);
         if (targetAnchor == null)
         {
             Debug.LogError($"[WordVisualManager] Aborted: Anchor for '{category}' is NULL or destroyed!");
-            return;
+            return null;
         }
 
         if (string.IsNullOrEmpty(word) || word == "No words found")
         {
             Debug.LogWarning($"[WordVisualManager] Aborted: Word string is invalid ('{word}').");
-            return;
+            return null;
         }
 
         GameObject prefab = GetPrefabForWord(word);
         if (prefab == null)
         {
-            Debug.LogError($"[WordVisualManager] Aborted: No prefab mapping found for word '{word}' in mappingDict! Check exact spelling/casing in Inspector mappings.");
-            return;
+            Debug.LogError($"[WordVisualManager] Aborted: No prefab mapping found for word '{word}' in mappingDict!");
+            return null;
         }
 
         GameObject instance = Instantiate(prefab, targetAnchor);
@@ -134,6 +140,7 @@ public class WordVisualManager : MonoBehaviour
 
         activeInstances[category] = instance;
         Debug.Log($"[WordVisualManager] Successfully instantiated '{prefab.name}' under anchor '{targetAnchor.name}'.");
+        return instance;
     }
 
     public void ClearCategoryVisual(WordCategory category)
@@ -159,7 +166,6 @@ public class WordVisualManager : MonoBehaviour
 
     private Transform GetAnchorForCategory(WordCategory category)
     {
-        // Ensure anchors are bound if null/destroyed
         if ((category == WordCategory.Character && characterSceneAnchor == null) ||
             (category == WordCategory.Place && placeSceneAnchor == null))
         {
