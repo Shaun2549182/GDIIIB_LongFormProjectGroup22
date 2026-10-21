@@ -1,35 +1,27 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public struct WordVisualMapping
 {
     public string wordText;
-    public Sprite visualSprite;
+    public GameObject visualPrefab; // Square or Triangle prefab
 }
 
 public class WordVisualManager : MonoBehaviour
 {
     public static WordVisualManager Instance { get; private set; }
 
-    [Header("Main Scene Display Anchors")]
+    [Header("Main Scene Display Anchors (Fallback Inspector References)")]
     [SerializeField] private Transform characterSceneAnchor;
     [SerializeField] private Transform placeSceneAnchor;
 
-    [Header("Assembly Phase Scales")]
-    [SerializeField] private Vector3 assemblyCharacterScale = new Vector3(250f, 250f, 1f);
-    [SerializeField] private Vector3 assemblyPlaceScale = new Vector3(0.6f, 0.6f, 1f);
-
-    [Header("Display Phase Scales")]
-    [SerializeField] private Vector3 displayCharacterScale = new Vector3(15f, 15f, 1f);
-    [SerializeField] private Vector3 displayPlaceScale = new Vector3(1f, 1f, 1f);
-
-    [Header("Word to Sprite Mappings")]
+    [Header("Word to Sprite Prefab Mappings")]
     [SerializeField] private List<WordVisualMapping> mappings;
 
-    private Dictionary<string, Sprite> mappingDict;
+    private Dictionary<string, GameObject> mappingDict;
     private Dictionary<WordCategory, GameObject> activeInstances = new Dictionary<WordCategory, GameObject>();
 
     private void Awake()
@@ -48,107 +40,100 @@ public class WordVisualManager : MonoBehaviour
         InitializeDictionary();
     }
 
-    public void RegisterSceneAnchors(Transform charAnchor, Transform placeAnchor)
+    private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
+    private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        characterSceneAnchor = charAnchor;
-        placeSceneAnchor = placeAnchor;
+        // Clear destroyed visual instance references from previous scene
+        activeInstances.Clear();
+
+        // Relocate visual anchors in newly loaded scene
+        RebindSceneAnchors();
+    }
+
+    /// <summary>
+    /// Searches active scene for anchor objects named "CharacterAnchor" and "PlaceAnchor"
+    /// </summary>
+    public void RebindSceneAnchors()
+    {
+        GameObject charObj = GameObject.Find("CharacterAnchor");
+        if (charObj != null)
+        {
+            characterSceneAnchor = charObj.transform;
+            Debug.Log("[WordVisualManager] Successfully bound 'CharacterAnchor'.");
+        }
+        else
+        {
+            Debug.LogWarning("[WordVisualManager] Failed to find 'CharacterAnchor' in current scene!");
+        }
+
+        GameObject placeObj = GameObject.Find("PlaceAnchor");
+        if (placeObj != null)
+        {
+            placeSceneAnchor = placeObj.transform;
+            Debug.Log("[WordVisualManager] Successfully bound 'PlaceAnchor'.");
+        }
+        else
+        {
+            Debug.LogWarning("[WordVisualManager] Failed to find 'PlaceAnchor' in current scene!");
+        }
     }
 
     private void InitializeDictionary()
     {
-        mappingDict = new Dictionary<string, Sprite>(StringComparer.OrdinalIgnoreCase);
+        mappingDict = new Dictionary<string, GameObject>(StringComparer.OrdinalIgnoreCase);
         foreach (var mapping in mappings)
         {
-            if (!string.IsNullOrEmpty(mapping.wordText) && mapping.visualSprite != null)
+            if (!string.IsNullOrEmpty(mapping.wordText) && mapping.visualPrefab != null)
             {
-                mappingDict[mapping.wordText] = mapping.visualSprite;
+                mappingDict[mapping.wordText] = mapping.visualPrefab;
             }
         }
     }
 
-    public Sprite GetSpriteForWord(string word)
+    public GameObject GetPrefabForWord(string word)
     {
         if (string.IsNullOrEmpty(word)) return null;
         if (mappingDict == null) InitializeDictionary();
 
-        mappingDict.TryGetValue(word, out Sprite sprite);
-        return sprite;
-    }
-
-    public Vector3 GetScaleForCategory(WordCategory category, bool isDisplayPhase = false)
-    {
-        if (isDisplayPhase)
-        {
-            switch (category)
-            {
-                case WordCategory.Character: return displayCharacterScale;
-                case WordCategory.Place: return displayPlaceScale;
-                default: return Vector3.one;
-            }
-        }
-        else
-        {
-            switch (category)
-            {
-                case WordCategory.Character: return assemblyCharacterScale;
-                case WordCategory.Place: return assemblyPlaceScale;
-                default: return Vector3.one;
-            }
-        }
-    }
-
-    public GameObject SpawnVisualAtAnchor(string word, WordCategory category, Transform anchor, bool isDisplayPhase = false)
-    {
-        if (anchor == null || string.IsNullOrEmpty(word) || word == "No words found") return null;
-
-        Sprite sprite = GetSpriteForWord(word);
-        if (sprite != null)
-        {
-            GameObject instance = new GameObject($"Visual_{word}");
-            instance.transform.SetParent(anchor, false);
-            instance.transform.localPosition = Vector3.zero;
-            instance.transform.localRotation = Quaternion.identity;
-            instance.transform.localScale = GetScaleForCategory(category, isDisplayPhase);
-
-            // Handle UI Canvas rendering
-            if (anchor is RectTransform || anchor.GetComponentInParent<Canvas>() != null)
-            {
-                Image img = instance.AddComponent<Image>();
-                img.sprite = sprite;
-                img.preserveAspect = true;
-
-                // Moves this object to the top of its parent's hierarchy so it draws BEHIND sibling UI elements
-                instance.transform.SetAsFirstSibling();
-            }
-            // Handle 2D World Space rendering
-            else
-            {
-                SpriteRenderer sr = instance.AddComponent<SpriteRenderer>();
-                sr.sprite = sprite;
-
-                // Negative sorting order forces rendering BEHIND standard world objects (default order = 0)
-                sr.sortingOrder = -100;
-            }
-
-            return instance;
-        }
-
-        return null;
+        mappingDict.TryGetValue(word, out GameObject prefab);
+        return prefab;
     }
 
     public void UpdateCategoryVisual(WordCategory category, string word)
     {
+        Debug.Log($"[WordVisualManager] UpdateCategoryVisual called for Category: '{category}', Word: '{word}'");
+
         ClearCategoryVisual(category);
 
         Transform targetAnchor = GetAnchorForCategory(category);
-        if (targetAnchor == null) return;
-
-        GameObject instance = SpawnVisualAtAnchor(word, category, targetAnchor, isDisplayPhase: false);
-
-        if (instance != null)
+        if (targetAnchor == null)
         {
-            activeInstances[category] = instance;
+            Debug.LogError($"[WordVisualManager] Aborted: Anchor for '{category}' is NULL or destroyed!");
+            return;
         }
+
+        if (string.IsNullOrEmpty(word) || word == "No words found")
+        {
+            Debug.LogWarning($"[WordVisualManager] Aborted: Word string is invalid ('{word}').");
+            return;
+        }
+
+        GameObject prefab = GetPrefabForWord(word);
+        if (prefab == null)
+        {
+            Debug.LogError($"[WordVisualManager] Aborted: No prefab mapping found for word '{word}' in mappingDict! Check exact spelling/casing in Inspector mappings.");
+            return;
+        }
+
+        GameObject instance = Instantiate(prefab, targetAnchor);
+        instance.transform.localPosition = Vector3.zero;
+        instance.transform.localRotation = Quaternion.identity;
+        instance.transform.localScale = Vector3.one;
+
+        activeInstances[category] = instance;
+        Debug.Log($"[WordVisualManager] Successfully instantiated '{prefab.name}' under anchor '{targetAnchor.name}'.");
     }
 
     public void ClearCategoryVisual(WordCategory category)
@@ -174,11 +159,21 @@ public class WordVisualManager : MonoBehaviour
 
     private Transform GetAnchorForCategory(WordCategory category)
     {
+        // Ensure anchors are bound if null/destroyed
+        if ((category == WordCategory.Character && characterSceneAnchor == null) ||
+            (category == WordCategory.Place && placeSceneAnchor == null))
+        {
+            RebindSceneAnchors();
+        }
+
         switch (category)
         {
-            case WordCategory.Character: return characterSceneAnchor;
-            case WordCategory.Place: return placeSceneAnchor;
-            default: return null;
+            case WordCategory.Character:
+                return characterSceneAnchor;
+            case WordCategory.Place:
+                return placeSceneAnchor;
+            default:
+                return null;
         }
     }
 }

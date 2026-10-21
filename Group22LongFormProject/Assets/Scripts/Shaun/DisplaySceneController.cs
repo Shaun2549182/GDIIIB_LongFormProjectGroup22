@@ -8,14 +8,10 @@ public class DisplaySceneController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sentenceDisplayText;
     [SerializeField] private Transform characterDisplayAnchor;
     [SerializeField] private Transform placeDisplayAnchor;
-    [SerializeField] private Button playAgainButton;
 
     private void Start()
     {
-        if (playAgainButton != null)
-        {
-            playAgainButton.onClick.AddListener(OnPlayAgainClicked);
-        }
+
 
         DisplayFinalResult();
     }
@@ -27,7 +23,7 @@ public class DisplaySceneController : MonoBehaviour
         // 1. Render final formatted sentence
         if (sentenceDisplayText != null)
         {
-            sentenceDisplayText.text = GameManager.Instance.GetFormattedSentence();
+            string sentence = GameManager.Instance.GetDisplayStory();
         }
 
         // 2. Spawn Character visual prefab with Display Phase scale
