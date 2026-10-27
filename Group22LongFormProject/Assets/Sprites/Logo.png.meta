@@ -161,12 +161,12 @@ TextureImporter:
       name: Logo_0
       rect:
         serializedVersion: 2
-        x: 256
-        y: 219
-        width: 611
-        height: 333
+        x: 240
+        y: 213
+        width: 659
+        height: 340
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -183,7 +183,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: c196180f9b10bae48b4c342111679df3
+    spriteID: 029f215afa18a304b8cd484603709375
     internalID: 0
     vertices: []
     indices: 
@@ -201,8 +201,7 @@ TextureImporter:
       Logo_13: -1453834278069125553
       Logo_14: -8074770578077153683
       Logo_15: -6159489392364382447
-      Logo_16: 747930522
-      Logo_17: 222135208
+      Logo_16: -933827454
       Logo_2: 6875538535012287733
       Logo_3: 2381070441135384947
       Logo_4: -3774021269495190454

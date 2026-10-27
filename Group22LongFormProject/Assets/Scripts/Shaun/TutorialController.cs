@@ -1,81 +1,47 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
-public class TutorialController : MonoBehaviour
+public class TutorialSceneController : MonoBehaviour
 {
-    [Header("Tutorial Text Boxes")]
-    [Tooltip("Drag your text box GameObjects here in sequential order.")]
-    [SerializeField] private List<GameObject> textBoxes = new List<GameObject>();
+    [SerializeField] private GameObject arcadeInstructionObject;
+    [SerializeField] private GameObject postArcadeInstructionObject;
 
-    [Header("Navigation Buttons")]
-    [SerializeField] private Button nextButton;
-    [SerializeField] private Button backButton;
+    private bool hasCompletedArcade = false;
 
-    [Header("Scene Transition")]
-    [SerializeField] private string gameSceneName = "GameScene";
-
-    private int currentIndex = 0;
-
-    private void Awake()
-    {
-        if (nextButton != null) nextButton.onClick.AddListener(OnNextClicked);
-        if (backButton != null) backButton.onClick.AddListener(OnBackClicked);
-    }
+    private void OnEnable() => GameManager.OnPhaseChanged += HandlePhaseChanged;
+    private void OnDisable() => GameManager.OnPhaseChanged -= HandlePhaseChanged;
 
     private void Start()
     {
-        ShowStep(0);
+        // Ensure both text objects start hidden
+        HideAllInstructions();
     }
 
-    private void ShowStep(int index)
+    private void HandlePhaseChanged(GamePhase newPhase)
     {
-        if (textBoxes == null || textBoxes.Count == 0) return;
-
-        currentIndex = Mathf.Clamp(index, 0, textBoxes.Count - 1);
-
-        // Enable only the active text box object
-        for (int i = 0; i < textBoxes.Count; i++)
+        if (newPhase == GamePhase.Arcade)
         {
-            if (textBoxes[i] != null)
-            {
-                textBoxes[i].SetActive(i == currentIndex);
-            }
+            hasCompletedArcade = true;
+
+            // Show Arcade text, ensure Post-Arcade text is hidden
+            if (postArcadeInstructionObject != null) postArcadeInstructionObject.SetActive(false);
+            if (arcadeInstructionObject != null) arcadeInstructionObject.SetActive(true);
         }
-
-        // Hide back button on first box, show on step 2 (index 1) and beyond
-        if (backButton != null)
+        else if (newPhase == GamePhase.Assembly && hasCompletedArcade)
         {
-            backButton.gameObject.SetActive(currentIndex > 0);
-        }
-    }
-
-    private void OnNextClicked()
-    {
-        if (currentIndex < textBoxes.Count - 1)
-        {
-            ShowStep(currentIndex + 1);
+            // Hide Arcade text, show Post-Arcade text
+            if (arcadeInstructionObject != null) arcadeInstructionObject.SetActive(false);
+            if (postArcadeInstructionObject != null) postArcadeInstructionObject.SetActive(true);
         }
         else
         {
-            // Final text box reached: transition to GameScene
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.RestartGame();
-            }
-            else
-            {
-                SceneManager.LoadScene(gameSceneName);
-            }
+            // Hide both text objects during other phase transitions
+            HideAllInstructions();
         }
     }
 
-    private void OnBackClicked()
+    private void HideAllInstructions()
     {
-        if (currentIndex > 0)
-        {
-            ShowStep(currentIndex - 1);
-        }
+        if (arcadeInstructionObject != null) arcadeInstructionObject.SetActive(false);
+        if (postArcadeInstructionObject != null) postArcadeInstructionObject.SetActive(false);
     }
 }

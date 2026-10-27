@@ -39,8 +39,13 @@ public class SentenceSlotUI : MonoBehaviour
     {
         if (newPhase == GamePhase.Assembly)
         {
+            if (TryGetComponent<TMP_Dropdown>(out var dropdown))
+            {
+                dropdown.gameObject.SetActive(true);
+                dropdown.interactable = true; // Re-enable interactability
+            }
+
             PopulateDropdownOptions();
-            dropdown.interactable = true;
         }
         else
         {
@@ -71,7 +76,7 @@ public class SentenceSlotUI : MonoBehaviour
 
         if (collectedWords == null || collectedWords.Count == 0)
         {
-            dropdown.options.Add(new TMP_Dropdown.OptionData("No words found"));
+            dropdown.options.Add(new TMP_Dropdown.OptionData("BLANK"));
             dropdown.interactable = false;
             WordVisualManager.Instance?.ClearCategoryVisual(slotCategory);
         }
