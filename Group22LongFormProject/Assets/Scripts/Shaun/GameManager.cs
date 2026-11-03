@@ -36,6 +36,11 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public static event Action<GamePhase> OnPhaseChanged;
+    public static event Action<int> OnHealthChanged;
+
+    [Header("Health & Lives")]
+    [SerializeField] private int maxHealth = 7;
+    public int CurrentHealth { get; private set; }
 
     [Header("Scene Names")]
     [SerializeField] private string mainGameSceneName = "GameScene";
@@ -150,6 +155,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            InitializeHealth();
         }
         else
         {
@@ -178,6 +184,69 @@ public class GameManager : MonoBehaviour
         if (scene.name == mainGameSceneName)
         {
             InitializeAssemblyPhase();
+        }
+    }
+
+    public void InitializeHealth()
+    {
+        CurrentHealth = maxHealth;
+        OnHealthChanged?.Invoke(CurrentHealth);
+    }
+
+    /// <summary>
+    /// Deducts a life. Returns true if the player is alive, false if Game Over.
+    /// </summary>
+    public bool DeductLife()
+    {
+        CurrentHealth = Mathf.Max(0, CurrentHealth - 1);
+        OnHealthChanged?.Invoke(CurrentHealth);
+
+        Debug.Log($"[GameManager] Life deducted. Remaining Health: {CurrentHealth}");
+
+        if (CurrentHealth <= 0)
+        {
+            ChangePhase(GamePhase.GameOver);
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Encapsulated Setter for Character selection across Acts.
+    /// </summary>
+    public void SetSelectedCharacter(string word)
+    {
+        if (string.IsNullOrWhiteSpace(word) || word == "BLANK") return;
+
+        if (CurrentAct == 1)
+        {
+            SelectedCharacterWord = word.Trim();
+            Debug.Log($"[GameManager] Act 1 Character set to: {SelectedCharacterWord}");
+        }
+        else
+        {
+            Act2SelectedCharacterWord = word.Trim();
+            Debug.Log($"[GameManager] Act 2 Character set to: {Act2SelectedCharacterWord}");
+        }
+    }
+
+    /// <summary>
+    /// Encapsulated Setter for Place/Adverb selection across Acts.
+    /// </summary>
+    public void SetSelectedPlace(string word)
+    {
+        if (string.IsNullOrWhiteSpace(word) || word == "BLANK") return;
+
+        if (CurrentAct == 1)
+        {
+            SelectedPlaceWord = word.Trim();
+            Debug.Log($"[GameManager] Act 1 Place set to: {SelectedPlaceWord}");
+        }
+        else
+        {
+            Act2SelectedPlaceWord = word.Trim();
+            Debug.Log($"[GameManager] Act 2 Place set to: {Act2SelectedPlaceWord}");
         }
     }
 
@@ -213,6 +282,8 @@ public class GameManager : MonoBehaviour
         Act2SelectedCharacterWord = string.Empty;
         Act2SelectedPlaceWord = string.Empty;
 
+        InitializeHealth();
+
         WordInventory.Instance?.ClearInventory();
         WordVisualManager.Instance?.ClearAllVisuals();
 
@@ -244,9 +315,6 @@ public class GameManager : MonoBehaviour
         return GetCurrentOutcome().act2Template;
     }
 
-    /// <summary>
-    /// Generates the filled-in Act 2 narrative outcome story for Act2DisplayScene.
-    /// </summary>
     public string GetAct2DisplayStory()
     {
         NarrativeOutcome outcome = GetCurrentOutcome();
@@ -320,16 +388,8 @@ public class GameManager : MonoBehaviour
 
     public void LockInChoices(string characterWord, string placeWord)
     {
-        if (CurrentAct == 1)
-        {
-            SelectedCharacterWord = characterWord;
-            SelectedPlaceWord = placeWord;
-        }
-        else if (CurrentAct == 2)
-        {
-            Act2SelectedCharacterWord = characterWord;
-            Act2SelectedPlaceWord = placeWord;
-        }
+        SetSelectedCharacter(characterWord);
+        SetSelectedPlace(placeWord);
 
         ChangePhase(GamePhase.Display);
 

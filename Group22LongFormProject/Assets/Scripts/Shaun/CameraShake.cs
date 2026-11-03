@@ -28,7 +28,7 @@ public class CameraShake : MonoBehaviour
     /// <summary>
     /// Triggers a brief camera shake effect.
     /// </summary>
-    public void Shake(float duration = 0.05f, float magnitude = 0.01f)
+    public void Shake(float duration = 0.005f, float magnitude = 0.001f)
     {
         if (shakeCoroutine != null) StopCoroutine(shakeCoroutine);
         shakeCoroutine = StartCoroutine(DoShake(duration, magnitude));

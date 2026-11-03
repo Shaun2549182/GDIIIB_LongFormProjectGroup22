@@ -756,6 +756,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_Color.b
+      value: 0.015686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -919,7 +927,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5039452733245576674, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_Color.b
-      value: 0.015686274
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5039452733245576674, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_Color.g
@@ -927,7 +935,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5039452733245576674, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_Color.r
-      value: 0.74980545
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5774886367912992045, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: wordText
@@ -1261,6 +1269,14 @@ PrefabInstance:
     - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Name
       value: Brick (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_Color.b
+      value: 0.015686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1858,7 +1874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c472797ce509d1c45a40fe865498de52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7
+  speed: 6
   xClamp: 100
 --- !u!50 &505751906
 Rigidbody2D:
@@ -2004,6 +2020,14 @@ PrefabInstance:
     - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Name
       value: Brick (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_Color.b
+      value: 0.015686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2269,13 +2293,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 755660187}
   spriteRenderer: {fileID: 755660189}
-  initialSpeed: 4
+  selectionParticlePrefab: {fileID: 8164801467799387011, guid: b5d7f00258ff60947a91640e347d2b3b, type: 3}
+  initialSpeed: 3.5
   paddleTransform: {fileID: 505751904}
+  defaultColor: {r: 1, g: 0, b: 0, a: 1}
   liamColor: {r: 1, g: 1, b: 1, a: 1}
   benColor: {r: 1, g: 0.41, b: 0.71, a: 1}
   emmaColor: {r: 0.2, g: 0.6, b: 1, a: 1}
-  wallShakeDuration: 0.12
-  wallShakeMagnitude: 0.1
+  wallShakeDuration: 0.1
+  wallShakeMagnitude: 0.02
 --- !u!1001 &824795141
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2642,6 +2668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e3b4a098798d64f8e8ce075dd514c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 7
   mainGameSceneName: GameScene
   displaySceneName: DisplayScene
   act2GameSceneName: Act2GameScene

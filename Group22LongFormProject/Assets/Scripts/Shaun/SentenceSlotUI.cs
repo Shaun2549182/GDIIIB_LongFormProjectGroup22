@@ -42,7 +42,7 @@ public class SentenceSlotUI : MonoBehaviour
             if (TryGetComponent<TMP_Dropdown>(out var dropdown))
             {
                 dropdown.gameObject.SetActive(true);
-                dropdown.interactable = true; // Re-enable interactability
+                dropdown.interactable = true;
             }
 
             PopulateDropdownOptions();
@@ -71,7 +71,6 @@ public class SentenceSlotUI : MonoBehaviour
 
         dropdown.ClearOptions();
 
-        // Retrieve words filtered strictly by this slot's category
         List<string> collectedWords = WordInventory.Instance.GetWordsByCategory(slotCategory);
 
         if (collectedWords == null || collectedWords.Count == 0)
@@ -94,7 +93,7 @@ public class SentenceSlotUI : MonoBehaviour
             dropdown.RefreshShownValue();
 
             string defaultWord = GetSelectedWord();
-            WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, defaultWord);
+            ApplySelectionState(defaultWord);
         }
 
         dropdown.onValueChanged.AddListener(OnSelectionChanged);
@@ -106,10 +105,35 @@ public class SentenceSlotUI : MonoBehaviour
         if (isInitializing) return;
 
         string selectedWord = GetSelectedWord();
-        if (!string.IsNullOrEmpty(selectedWord) && selectedWord != "BLANK")
+        ApplySelectionState(selectedWord);
+    }
+
+    /// <summary>
+    /// Calls public setter methods on GameManager, triggers ball juice, and updates scene anchors.
+    /// </summary>
+    private void ApplySelectionState(string word)
+    {
+        if (string.IsNullOrEmpty(word) || word == "BLANK") return;
+
+        if (GameManager.Instance != null)
         {
-            WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, selectedWord);
+            if (slotCategory == WordCategory.Character)
+            {
+                GameManager.Instance.SetSelectedCharacter(word);
+
+                BallController ball = FindFirstObjectByType<BallController>();
+                if (ball != null)
+                {
+                    ball.TriggerCharacterChangeFeedback();
+                }
+            }
+            else if (slotCategory == WordCategory.Place)
+            {
+                GameManager.Instance.SetSelectedPlace(word);
+            }
         }
+
+        WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, word);
     }
 
     public string GetSelectedWord()
