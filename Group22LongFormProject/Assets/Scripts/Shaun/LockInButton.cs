@@ -9,7 +9,6 @@ public class LockInButton : MonoBehaviour
 {
     private Button button;
     private CanvasGroup canvasGroup;
-    private bool hasCompletedArcade = false;
 
     private void Awake()
     {
@@ -25,14 +24,8 @@ public class LockInButton : MonoBehaviour
 
     private void HandlePhaseChanged(GamePhase newPhase)
     {
-        // Track when player transitions through Arcade
-        if (newPhase == GamePhase.Arcade)
-        {
-            hasCompletedArcade = true;
-            HideImmediate();
-        }
-        // Reveal only when returning to Assembly after Arcade is finished
-        else if (newPhase == GamePhase.Assembly && hasCompletedArcade)
+        // Reveal ONLY when in Assembly phase AND the arcade phase was successfully passed
+        if (newPhase == GamePhase.Assembly && GameManager.Instance != null && GameManager.Instance.IsArcadeCompleted)
         {
             ShowButton();
         }
@@ -60,7 +53,6 @@ public class LockInButton : MonoBehaviour
     {
         string currentScene = SceneManager.GetActiveScene().name;
 
-        // 1. If clicked inside the Tutorial scene, transition to GameScene
         if (currentScene.IndexOf("Tutorial", System.StringComparison.OrdinalIgnoreCase) >= 0)
         {
             Debug.Log("[LockInButton] Tutorial complete! Transitioning to GameScene.");
@@ -68,7 +60,6 @@ public class LockInButton : MonoBehaviour
             return;
         }
 
-        // 2. Extract selected choices using SentenceSlotUI methods
         string chosenCharacter = "";
         string chosenPlace = "";
 
@@ -95,16 +86,12 @@ public class LockInButton : MonoBehaviour
 
         canvasGroup.interactable = false;
 
-        Debug.Log($"[LockInButton] Choices locked in — Character: '{chosenCharacter}', Place: '{chosenPlace}'");
-
-        // 3. Pass selections to GameManager
         if (GameManager.Instance != null)
         {
             GameManager.Instance.LockInChoices(chosenCharacter, chosenPlace);
         }
         else
         {
-            Debug.LogError("[LockInButton] GameManager instance missing! Loading default display scene fallback.");
             SceneManager.LoadScene("DisplayScene");
         }
     }

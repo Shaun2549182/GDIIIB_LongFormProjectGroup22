@@ -13,6 +13,33 @@ public class FallingWordItem : MonoBehaviour
 
     public bool IsPendingDestruction { get; private set; } = false;
 
+    private void OnEnable()
+    {
+        GameManager.OnPhaseChanged += HandlePhaseChanged;
+        WordInventory.OnInventoryCleared += HandleInventoryCleared;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnPhaseChanged -= HandlePhaseChanged;
+        WordInventory.OnInventoryCleared -= HandleInventoryCleared;
+    }
+
+    private void HandlePhaseChanged(GamePhase newPhase)
+    {
+        // Instantly destroy falling word if state shifts away from Arcade
+        if (newPhase != GamePhase.Arcade)
+        {
+            CollectOrDestroy(collected: false);
+        }
+    }
+
+    private void HandleInventoryCleared()
+    {
+        // Instantly destroy falling word when inventory resets
+        CollectOrDestroy(collected: false);
+    }
+
     public void Initialize(string text, WordCategory category)
     {
         wordText = text;

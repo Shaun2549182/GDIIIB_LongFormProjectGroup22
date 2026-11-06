@@ -191,6 +191,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
+      objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
       value: 0.015686275
@@ -684,6 +688,158 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 110340523}
   m_CullTransparentMesh: 1
+--- !u!1 &250845865
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 250845866}
+  - component: {fileID: 250845868}
+  - component: {fileID: 250845867}
+  - component: {fileID: 250845869}
+  m_Layer: 5
+  m_Name: Lives
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &250845866
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250845865}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1665632798}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 400, y: 191.8}
+  m_SizeDelta: {x: 280.28, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &250845867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250845865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 7
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 32
+  m_fontSizeBase: 32
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &250845868
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250845865}
+  m_CullTransparentMesh: 1
+--- !u!114 &250845869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250845865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d399d93824b27740af9e2825b7a38ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  livesText: {fileID: 0}
+  textPrefix: 'Lives: '
 --- !u!1001 &260783870
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -756,6 +912,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
+      objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
       value: 0.015686275
@@ -774,6 +934,174 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7119354864016397947, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
   m_PrefabInstance: {fileID: 260783870}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &266734293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 266734294}
+  - component: {fileID: 266734298}
+  - component: {fileID: 266734297}
+  - component: {fileID: 266734296}
+  - component: {fileID: 266734295}
+  m_Layer: 5
+  m_Name: Retry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &266734294
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266734293}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1665632798}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 80.2, y: -9.139496}
+  m_SizeDelta: {x: 405.21, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &266734295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266734293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c92dc7f305222468e593a3d7876b75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 266734296}
+  promptText: {fileID: 266734297}
+  fadeInDuration: 0.3
+  displayDuration: 0.8
+  fadeOutDuration: 0.3
+--- !u!225 &266734296
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266734293}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &266734297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266734293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: That's not quite right...
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &266734298
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266734293}
+  m_CullTransparentMesh: 1
 --- !u!1 &268033873
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,6 +1196,10 @@ PrefabInstance:
     - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_Name
       value: TextBrick
+      objectReference: {fileID: 0}
+    - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
+      propertyPath: m_TagString
+      value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 4749048714466792231, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_LocalScale.x
@@ -1016,6 +1348,10 @@ PrefabInstance:
     - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_Name
       value: TextBrick (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
+      propertyPath: m_TagString
+      value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 4749048714466792231, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_LocalScale.x
@@ -1270,6 +1606,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
+      objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
       value: 0.015686275
@@ -1358,6 +1698,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Name
+      value: Brick
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
       value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
@@ -1449,6 +1793,10 @@ PrefabInstance:
     - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Name
       value: Brick (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
@@ -2021,6 +2369,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
+      objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
       value: 0.015686275
@@ -2122,6 +2474,54 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.4781, y: 2.0521, z: 2}
   m_LocalScale: {x: 0.9991422, y: 0.76506174, z: 0.17077045}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &718672243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 718672245}
+  - component: {fileID: 718672244}
+  m_Layer: 0
+  m_Name: arcadestagecontroller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &718672244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718672243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0165150ecc3dcfd48877c7634bfd5975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brickContainer: {fileID: 1162857474}
+  stageBricks: []
+  ballController: {fileID: 755660191}
+  arcadeTimer: {fileID: 1738855016}
+--- !u!4 &718672245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718672243}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.28697807, y: -0.33441758, z: 449.04337}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2317,6 +2717,10 @@ PrefabInstance:
     - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_Name
       value: TextBrick (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
+      propertyPath: m_TagString
+      value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 4749048714466792231, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_LocalScale.x
@@ -2600,6 +3004,10 @@ PrefabInstance:
     - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Name
       value: Brick (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
@@ -3075,6 +3483,10 @@ PrefabInstance:
     - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_Name
       value: TextBrick (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
+      propertyPath: m_TagString
+      value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 4749048714466792231, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_LocalScale.x
@@ -3714,6 +4126,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TextBrick (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
+      propertyPath: m_TagString
+      value: Brick
+      objectReference: {fileID: 0}
     - target: {fileID: 4749048714466792231, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.63
@@ -3906,6 +4322,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
+      objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
       value: 0.015686275
@@ -4027,6 +4447,8 @@ RectTransform:
   - {fileID: 81487073}
   - {fileID: 1438052049}
   - {fileID: 1969757159}
+  - {fileID: 266734294}
+  - {fileID: 250845866}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4121,6 +4543,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
+      objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
       value: 0.015686275
@@ -4210,6 +4636,10 @@ PrefabInstance:
     - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Name
       value: Brick (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
@@ -4577,6 +5007,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
+      objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
       value: 0.015686275
@@ -4666,6 +5100,10 @@ PrefabInstance:
     - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Name
       value: Brick (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
@@ -4837,6 +5275,10 @@ PrefabInstance:
     - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_Name
       value: Brick (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3608281407373954670, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
+      propertyPath: m_TagString
+      value: Brick
       objectReference: {fileID: 0}
     - target: {fileID: 4749048714466792231, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: m_LocalScale.x
@@ -5142,6 +5584,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 8159458170092861535, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
+      propertyPath: m_TagString
+      value: Brick
+      objectReference: {fileID: 0}
     - target: {fileID: 8302075892490494448, guid: b9d9bc123d4f76f46902d029f705f75c, type: 3}
       propertyPath: m_Color.b
       value: 0.015686275
@@ -5319,3 +5765,4 @@ SceneRoots:
   - {fileID: 1162857474}
   - {fileID: 2049536761}
   - {fileID: 1405641486}
+  - {fileID: 718672245}

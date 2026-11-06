@@ -3,44 +3,90 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
 [RequireComponent(typeof(CanvasGroup))]
-public class StartArcadeButton : MonoBehaviour 
+public class StartArcadeButton : MonoBehaviour
 {
     private Button button;
     private CanvasGroup canvasGroup;
+    private bool isSentenceComplete = false;
 
-    private void Awake() 
+    private void Awake()
     {
         button = GetComponent<Button>();
         canvasGroup = GetComponent<CanvasGroup>();
-        
-        // Make invisible and non-interactive immediately on start
-        HideButtonImmediate();
-        
+
+        HideImmediate();
         button.onClick.AddListener(OnButtonClicked);
     }
 
-    private void OnEnable() => SentenceEvents.OnSentenceConstructionComplete += ShowButton;
-    private void OnDisable() => SentenceEvents.OnSentenceConstructionComplete -= ShowButton;
-
-    private void HideButtonImmediate() 
+    private void OnEnable()
     {
+        SentenceEvents.OnSentenceInit += HandleSentenceInit;
+        SentenceEvents.OnSentenceConstructionComplete += HandleSentenceComplete;
+        GameManager.OnPhaseChanged += HandlePhaseChanged;
+    }
+
+    private void OnDisable()
+    {
+        SentenceEvents.OnSentenceInit -= HandleSentenceInit;
+        SentenceEvents.OnSentenceConstructionComplete -= HandleSentenceComplete;
+        GameManager.OnPhaseChanged -= HandlePhaseChanged;
+    }
+
+    private void HandleSentenceInit(string template)
+    {
+        isSentenceComplete = false;
+        HideImmediate();
+    }
+
+    private void HandleSentenceComplete()
+    {
+        isSentenceComplete = true;
+
+        if (GameManager.Instance != null && GameManager.Instance.CurrentPhase == GamePhase.Assembly && !GameManager.Instance.IsArcadeCompleted)
+        {
+            ShowButton();
+        }
+    }
+
+    private void HandlePhaseChanged(GamePhase newPhase)
+    {
+        if (newPhase == GamePhase.Assembly)
+        {
+            // Reveal only if sentence typing is already complete and arcade phase is not finished
+            if (isSentenceComplete && (GameManager.Instance == null || !GameManager.Instance.IsArcadeCompleted))
+            {
+                ShowButton();
+            }
+            else
+            {
+                HideImmediate();
+            }
+        }
+        else
+        {
+            HideImmediate();
+        }
+    }
+
+    private void HideImmediate()
+    {
+        if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
     }
 
-    private void ShowButton() 
+    private void ShowButton()
     {
+        if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
-
-        // Smooth LeanTween fade-in
         LeanTween.alphaCanvas(canvasGroup, 1f, 0.4f).setEase(LeanTweenType.easeOutQuad);
     }
 
-    private void OnButtonClicked() 
+    private void OnButtonClicked()
     {
-        HideButtonImmediate();
-        GameManager.Instance.ChangePhase(GamePhase.Arcade);
+        HideImmediate();
+        GameManager.Instance?.ChangePhase(GamePhase.Arcade);
     }
 }

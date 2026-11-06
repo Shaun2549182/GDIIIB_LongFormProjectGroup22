@@ -8,36 +8,39 @@ public struct CollectedWord
     public string wordText;
     public WordCategory category;
 
-    public CollectedWord(string wordText, WordCategory category)
+    public CollectedWord(string text, WordCategory cat)
     {
-        this.wordText = wordText;
-        this.category = category;
+        wordText = text;
+        category = cat;
     }
 }
 
 public class WordInventory : MonoBehaviour
 {
     public static WordInventory Instance { get; private set; }
+
     public static event Action<string, WordCategory> OnWordCollected;
+    public static event Action OnInventoryCleared;
 
     public List<CollectedWord> CollectedWords { get; private set; } = new List<CollectedWord>();
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     public void AddWord(string wordText, WordCategory category)
     {
         CollectedWords.Add(new CollectedWord(wordText, category));
         OnWordCollected?.Invoke(wordText, category);
+    }
+
+    public void ClearInventory()
+    {
+        CollectedWords.Clear();
+        OnInventoryCleared?.Invoke();
+        Debug.Log("[WordInventory] Inventory cleared.");
     }
 
     public List<string> GetWordsByCategory(WordCategory category)
@@ -53,18 +56,5 @@ public class WordInventory : MonoBehaviour
         }
 
         return matchingWords;
-    }
-
-    /// <summary>
-    /// Clears all collected words from the inventory list when transitioning acts or resetting the game state.
-    /// </summary>
-    public void ClearInventory()
-    {
-        if (CollectedWords != null)
-        {
-            CollectedWords.Clear();
-        }
-
-        Debug.Log("[WordInventory] Inventory successfully cleared.");
     }
 }

@@ -15,20 +15,20 @@ public enum GamePhase
 public struct NarrativeOutcome
 {
     public string characterWord;
-    public string placeWord; // Act 1 Occupation/Place category word (e.g., Officer, Baker)
+    public string placeWord;
 
     [TextArea(2, 4)]
-    public string displayStory; // Story text shown in Act 1 DisplayScene
+    public string displayStory;
 
     [TextArea(2, 4)]
-    public string act2Template; // Act 2 template sentence for Assembly Phase
+    public string act2Template;
 
     [TextArea(2, 4)]
-    public string act2DisplayStory; // Story text shown in Act 2 DisplayScene
+    public string act2DisplayStory;
 
     [Header("Act 2 Word Pools")]
-    public List<string> act2CharacterWords; // Object words for Act 2
-    public List<string> act2PlaceWords;     // Adverb/Action words for Act 2
+    public List<string> act2CharacterWords;
+    public List<string> act2PlaceWords;
 }
 
 public class GameManager : MonoBehaviour
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     public static event Action<GamePhase> OnPhaseChanged;
     public static event Action<int> OnHealthChanged;
 
-    [Header("Health & Lives")]
+    [Header("Health & Persistent Lives")]
     [SerializeField] private int maxHealth = 7;
     public int CurrentHealth { get; private set; }
 
@@ -140,6 +140,7 @@ public class GameManager : MonoBehaviour
 
     public GamePhase CurrentPhase { get; private set; } = GamePhase.Assembly;
     public int CurrentAct { get; private set; } = 1;
+    public bool IsArcadeCompleted { get; private set; } = false;
 
     // Act 1 Choices
     public string SelectedCharacterWord { get; private set; }
@@ -194,14 +195,14 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Deducts a life. Returns true if the player is alive, false if Game Over.
+    /// Deducts a persistent life across acts. Returns true if player remains alive, false if Game Over.
     /// </summary>
     public bool DeductLife()
     {
         CurrentHealth = Mathf.Max(0, CurrentHealth - 1);
         OnHealthChanged?.Invoke(CurrentHealth);
 
-        Debug.Log($"[GameManager] Life deducted. Remaining Health: {CurrentHealth}");
+        Debug.Log($"[GameManager] Life deducted. Persistent Health Remaining: {CurrentHealth}");
 
         if (CurrentHealth <= 0)
         {
@@ -213,7 +214,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Encapsulated Setter for Character selection across Acts.
+    /// Public Setter for Character word selection across Acts.
     /// </summary>
     public void SetSelectedCharacter(string word)
     {
@@ -232,7 +233,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Encapsulated Setter for Place/Adverb selection across Acts.
+    /// Public Setter for Place/Adverb word selection across Acts.
     /// </summary>
     public void SetSelectedPlace(string word)
     {
@@ -281,6 +282,7 @@ public class GameManager : MonoBehaviour
         SelectedPlaceWord = string.Empty;
         Act2SelectedCharacterWord = string.Empty;
         Act2SelectedPlaceWord = string.Empty;
+        IsArcadeCompleted = false;
 
         InitializeHealth();
 
@@ -288,6 +290,46 @@ public class GameManager : MonoBehaviour
         WordVisualManager.Instance?.ClearAllVisuals();
 
         ChangePhase(GamePhase.Assembly);
+    }
+
+    public void CompleteArcadePhase()
+    {
+        int characterCount = WordInventory.Instance != null ? WordInventory.Instance.GetWordsByCategory(WordCategory.Character).Count : 0;
+        int placeCount = WordInventory.Instance != null ? WordInventory.Instance.GetWordsByCategory(WordCategory.Place).Count : 0;
+
+        bool hasRequiredWords = (characterCount >= 1 && placeCount >= 1);
+        bool isTutorial = SceneManager.GetActiveScene().name.IndexOf("Tutorial", StringComparison.OrdinalIgnoreCase) >= 0;
+
+        if (hasRequiredWords)
+        {
+            IsArcadeCompleted = true;
+            Debug.Log("[GameManager] Requirements met! Moving to Assembly Phase with Lock-In available.");
+            ChangePhase(GamePhase.Assembly);
+        }
+        else
+        {
+            IsArcadeCompleted = false;
+
+            if (isTutorial)
+            {
+                Debug.Log("[GameManager] Tutorial failed: Resetting stage without deducting persistent life.");
+                ArcadeRetryUI.Instance?.ShowRetryPrompt("That's not quite right...");
+                ArcadeStageController.Instance?.ResetStage();
+                ChangePhase(GamePhase.Assembly);
+            }
+            else
+            {
+                Debug.Log($"[GameManager] Requirements failed (Characters: {characterCount}, Places: {placeCount}). Deducting 1 persistent life.");
+                bool carriesOn = DeductLife();
+
+                if (carriesOn)
+                {
+                    ArcadeRetryUI.Instance?.ShowRetryPrompt("That's not quite right...");
+                    ArcadeStageController.Instance?.ResetStage();
+                    ChangePhase(GamePhase.Assembly);
+                }
+            }
+        }
     }
 
     public NarrativeOutcome GetCurrentOutcome()
@@ -305,25 +347,13 @@ public class GameManager : MonoBehaviour
         return defaultOutcome;
     }
 
-    public string GetDisplayStory()
-    {
-        return GetCurrentOutcome().displayStory;
-    }
-
-    public string GetAct2SentenceTemplate()
-    {
-        return GetCurrentOutcome().act2Template;
-    }
+    public string GetDisplayStory() => GetCurrentOutcome().displayStory;
+    public string GetAct2SentenceTemplate() => GetCurrentOutcome().act2Template;
 
     public string GetAct2DisplayStory()
     {
         NarrativeOutcome outcome = GetCurrentOutcome();
-        string storyText = outcome.act2DisplayStory;
-
-        if (string.IsNullOrEmpty(storyText))
-        {
-            storyText = outcome.act2Template;
-        }
+        string storyText = string.IsNullOrEmpty(outcome.act2DisplayStory) ? outcome.act2Template : outcome.act2DisplayStory;
 
         if (string.IsNullOrEmpty(storyText)) return defaultOutcome.displayStory;
 
@@ -369,23 +399,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(targetScene);
     }
 
-    public void CompleteArcadePhase()
-    {
-        int characterCount = WordInventory.Instance != null ? WordInventory.Instance.GetWordsByCategory(WordCategory.Character).Count : 0;
-        int placeCount = WordInventory.Instance != null ? WordInventory.Instance.GetWordsByCategory(WordCategory.Place).Count : 0;
-
-        if (characterCount >= 1 && placeCount >= 1)
-        {
-            Debug.Log("[GameManager] Requirements met! Transitioning to Assembly phase.");
-            ChangePhase(GamePhase.Assembly);
-        }
-        else
-        {
-            Debug.Log($"[GameManager] Requirements failed (Characters: {characterCount}, Places: {placeCount}). Game Over!");
-            ChangePhase(GamePhase.GameOver);
-        }
-    }
-
     public void LockInChoices(string characterWord, string placeWord)
     {
         SetSelectedCharacter(characterWord);
@@ -403,6 +416,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("[GameManager] Transitioning to Act 2 Game Scene.");
 
         CurrentAct = 2;
+        IsArcadeCompleted = false;
 
         WordInventory.Instance?.ClearInventory();
         WordVisualManager.Instance?.ClearAllVisuals();

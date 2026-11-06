@@ -39,18 +39,18 @@ public class SentenceSlotUI : MonoBehaviour
     {
         if (newPhase == GamePhase.Assembly)
         {
-            if (TryGetComponent<TMP_Dropdown>(out var dropdown))
-            {
-                dropdown.gameObject.SetActive(true);
-                dropdown.interactable = true;
-            }
-
             PopulateDropdownOptions();
+            dropdown.interactable = true;
         }
         else
         {
             dropdown.interactable = false;
-            WordVisualManager.Instance?.ClearCategoryVisual(slotCategory);
+
+            // Only clear visual on phase exit during Act 1; preserve persisted visuals in Act 2
+            if (GameManager.Instance == null || GameManager.Instance.CurrentAct == 1)
+            {
+                WordVisualManager.Instance?.ClearCategoryVisual(slotCategory);
+            }
         }
     }
 
@@ -75,9 +75,10 @@ public class SentenceSlotUI : MonoBehaviour
 
         if (collectedWords == null || collectedWords.Count == 0)
         {
-            dropdown.options.Add(new TMP_Dropdown.OptionData("BLANK"));
+            dropdown.options.Add(new TMP_Dropdown.OptionData("No words found"));
             dropdown.interactable = false;
-            WordVisualManager.Instance?.ClearCategoryVisual(slotCategory);
+            // FIX: Do NOT call ClearCategoryVisual here. 
+            // Leaving anchors intact preserves the persisted Act 1 visuals on scene start.
         }
         else
         {
@@ -92,8 +93,12 @@ public class SentenceSlotUI : MonoBehaviour
             dropdown.value = 0;
             dropdown.RefreshShownValue();
 
+            // Set scene sprite visual only if a valid word exists
             string defaultWord = GetSelectedWord();
-            ApplySelectionState(defaultWord);
+            if (!string.IsNullOrEmpty(defaultWord) && defaultWord != "No words found")
+            {
+                WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, defaultWord);
+            }
         }
 
         dropdown.onValueChanged.AddListener(OnSelectionChanged);
@@ -105,35 +110,10 @@ public class SentenceSlotUI : MonoBehaviour
         if (isInitializing) return;
 
         string selectedWord = GetSelectedWord();
-        ApplySelectionState(selectedWord);
-    }
-
-    /// <summary>
-    /// Calls public setter methods on GameManager, triggers ball juice, and updates scene anchors.
-    /// </summary>
-    private void ApplySelectionState(string word)
-    {
-        if (string.IsNullOrEmpty(word) || word == "BLANK") return;
-
-        if (GameManager.Instance != null)
+        if (!string.IsNullOrEmpty(selectedWord) && selectedWord != "No words found")
         {
-            if (slotCategory == WordCategory.Character)
-            {
-                GameManager.Instance.SetSelectedCharacter(word);
-
-                BallController ball = FindFirstObjectByType<BallController>();
-                if (ball != null)
-                {
-                    ball.TriggerCharacterChangeFeedback();
-                }
-            }
-            else if (slotCategory == WordCategory.Place)
-            {
-                GameManager.Instance.SetSelectedPlace(word);
-            }
+            WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, selectedWord);
         }
-
-        WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, word);
     }
 
     public string GetSelectedWord()

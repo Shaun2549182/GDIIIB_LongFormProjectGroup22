@@ -13,7 +13,6 @@ public class ArcadeTimer : MonoBehaviour
     {
         GameManager.OnPhaseChanged += HandlePhaseChanged;
 
-        // Catch phase state if component was enabled after the event was dispatched
         if (GameManager.Instance != null && GameManager.Instance.CurrentPhase == GamePhase.Arcade)
         {
             StartTimer();
@@ -67,7 +66,6 @@ public class ArcadeTimer : MonoBehaviour
             yield return null;
         }
 
-        // Time expired: Complete arcade phase
         GameManager.Instance?.CompleteArcadePhase();
     }
 }

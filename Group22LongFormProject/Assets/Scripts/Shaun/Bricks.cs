@@ -85,7 +85,7 @@ public class Brick : MonoBehaviour
         }
 
         // 3. Destroy Brick GameObject
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void OnDestroy()
