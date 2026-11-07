@@ -15,6 +15,7 @@ public class TutorialSequenceManager : MonoBehaviour
     [SerializeField] private SpriteRenderer sentenceBoxSprite;
     [SerializeField] private CanvasGroup sentenceContentGroup;
     [SerializeField] private CanvasGroup collectionBoxGroup;
+    [SerializeField] private CanvasGroup lockInButtonGroup; // FIX: Added Lock-In Button reference
 
     [TextArea(3, 5)]
     [SerializeField]
@@ -58,10 +59,11 @@ public class TutorialSequenceManager : MonoBehaviour
             tutorialIntroGroup.transform.localPosition -= new Vector3(0f, introSlideOffset, 0f);
         }
 
-        // 2. Hide Assembly Elements initially
+        // 2. Hide Assembly Elements & Lock-In Button initially
         SetSpriteAlpha(sentenceBoxSprite, 0f);
         SetCanvasGroupState(sentenceContentGroup, visible: false);
         SetCanvasGroupState(collectionBoxGroup, visible: false);
+        SetCanvasGroupState(lockInButtonGroup, visible: false); // FIX: Ensure lock-in button starts hidden
 
         // 3. Hide Arcade Elements & Instructions initially
         SetCanvasGroupState(arcadeUIGroup, visible: false);
@@ -192,16 +194,20 @@ public class TutorialSequenceManager : MonoBehaviour
 
     private IEnumerator TransitionToPostArcadeAssembly()
     {
-        // 1. Fade out Arcade Instructions (Text 1)
+        // 1. Fade out Arcade Instructions (Text 1) & Arcade UI
         yield return StartCoroutine(FadeGroup(arcadeInstructionsGroup, 1f, 0f));
         SetCanvasGroupState(arcadeInstructionsGroup, visible: false);
+        SetCanvasGroupState(arcadeUIGroup, visible: false);
 
         yield return new WaitForSeconds(delayBetweenFades);
 
-        // 2. Fade in Post-Arcade Text & Shape Sprites simultaneously
+        // 2. Fade in Post-Arcade Text, Lock-In Button & Extra Sprites simultaneously
         SetCanvasGroupState(postArcadeInstructionsGroup, visible: true);
+        SetCanvasGroupState(lockInButtonGroup, visible: true); // FIX: Enable Lock-In Button CanvasGroup
+
         StartCoroutine(FadeSprite(triangleSprite, 0f, 1f));
         StartCoroutine(FadeSprite(rectangleSprite, 0f, 1f));
+        StartCoroutine(FadeGroup(lockInButtonGroup, 0f, 1f)); // FIX: Animate Lock-In Button fade-in
         yield return StartCoroutine(FadeGroup(postArcadeInstructionsGroup, 0f, 1f));
     }
 

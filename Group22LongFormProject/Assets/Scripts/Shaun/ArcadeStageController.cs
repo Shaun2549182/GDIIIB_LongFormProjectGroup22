@@ -57,6 +57,8 @@ public class ArcadeStageController : MonoBehaviour
             }
         }
 
+        ArcadeTimer.Instance?.ResetTimer();
+
         // 2. Destroy any active falling word items in the scene
         FallingWordItem[] fallingWords = FindObjectsByType<FallingWordItem>(FindObjectsSortMode.None);
         foreach (var fallingWord in fallingWords)

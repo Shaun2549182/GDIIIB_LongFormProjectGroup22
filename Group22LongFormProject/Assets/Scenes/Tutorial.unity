@@ -489,7 +489,7 @@ MonoBehaviour:
   slotPrefab: {fileID: 6645465648927628223, guid: f92e31f8d1744f547bbf66ebdfeea976, type: 3}
   typeSpeed: 0.05
   overrideFontSize: 1
-  customFontSize: 24
+  customFontSize: 22
 --- !u!114 &81487076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -653,11 +653,11 @@ Transform:
   m_GameObject: {fileID: 97788017}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.5858555, y: 1.025558, z: -1870.6407}
+  m_LocalPosition: {x: -5.623435, y: 1.6698539, z: -0.026123047}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2029487715}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &110340523
 GameObject:
@@ -1015,11 +1015,11 @@ Transform:
   m_GameObject: {fileID: 268033873}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.03757958, y: -0.64429593, z: -1870.6146}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2029487715}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &374950328
 GameObject:
@@ -2708,11 +2708,11 @@ Transform:
   m_GameObject: {fileID: 1009087142}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.03757958, y: -0.64429593, z: -1870.6146}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2029487715}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1009087146
 MonoBehaviour:
@@ -2726,132 +2726,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e3b4a098798d64f8e8ce075dd514c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 7
   mainGameSceneName: GameScene
   displaySceneName: DisplayScene
   act2GameSceneName: Act2GameScene
   act2DisplaySceneName: Act2DisplayScene
+  act3GameSceneName: Act3GameScene
+  act3DisplaySceneName: Act3DisplayScene
   gameOverSceneName: GameOverScene
-  act1AssemblySentenceTemplate: In the modern day, {Character} is a {Place}.
-  defaultOutcome:
-    characterWord: Default
-    placeWord: Default
-    displayStory: The hero set out on an unexpected journey.
-    act2Template: Later that day, {Character} needed to {Place} find an item.
-    act2DisplayStory: By searching {Place}, the hero successfully recovered the lost
-      {Character} and saved the day!
-    act2CharacterWords:
-    - Key
-    - Map
-    - Compass
-    act2PlaceWords:
-    - Quickly
-    - Quietly
-    - Swiftly
-    - Softly
-  narrativeOutcomes:
-  - characterWord: Liam
-    placeWord: Officer
-    displayStory: Liam works as a police officer, though his clumsy nature leads
-      to him constantly spilling coffee on his uniform while on patrol.
-    act2Template: Officer Liam must {Place} search the police station to recover
-      his lost {Character}.
-    act2DisplayStory: Searching {Place}, Officer Liam finally retrieved his missing
-      {Character}. Though he knocked over three trash cans in the process, the precinct
-      commended his effort!
-    act2CharacterWords:
-    - Badge
-    - Radio
-    - Whistle
-    act2PlaceWords:
-    - Hastily
-    - Badly
-    - Wildly
-    - Rashly
-  - characterWord: Liam
-    placeWord: Baker
-    displayStory: Liam works as a baker, though his clumsiness often leaves him tripping
-      over flour sacks and covered head-to-toe in dough.
-    act2Template: Baker Liam needs to {Place} gather ingredients to bake a huge {Character}.
-    act2DisplayStory: By moving {Place}, Baker Liam gathered every single ingredient
-      and baked a magnificent {Character}! It was slightly lopsided, but delicious.
-    act2CharacterWords:
-    - Loaf
-    - Cake
-    - Tart
-    act2PlaceWords:
-    - Oddly
-    - Madly
-    - Roughly
-    - Crudely
-  - characterWord: Ben
-    placeWord: Officer
-    displayStory: Ben serves as a curious town officer, always asking extra questions
-      and poking into every strange detail on his beat.
-    act2Template: Officer Ben decides to {Place} inspect the alley using his trusty
-      {Character}.
-    act2DisplayStory: Inspecting {Place}, Officer Ben uncovered a major clue using
-      his trusty {Character}, solving the town mystery before sunset!
-    act2CharacterWords:
-    - Lens
-    - Folder
-    - Camera
-    act2PlaceWords:
-    - Quietly
-    - Eagerly
-    - Keenly
-    - Slyly
-  - characterWord: Ben
-    placeWord: Baker
-    displayStory: Ben works as a baker whose curious mind drives him to constantly
-      experiment with unusual, creative recipe combinations.
-    act2Template: Baker Ben wants to {Place} mix his baking dough with a mysterious
-      {Character}.
-    act2DisplayStory: Mixing {Place}, Baker Ben incorporated the mysterious {Character}
-      into his dough, creating a brand new award-winning pastry!
-    act2CharacterWords:
-    - Jar
-    - Spice
-    - Recipe
-    act2PlaceWords:
-    - Boldly
-    - Keenly
-    - Wisely
-    - Anew
-  - characterWord: Emma
-    placeWord: Officer
-    displayStory: Emma is a diligent neighborhood officer who double-checks every
-      report and keeps the town safe through untiring dedication.
-    act2Template: Officer Emma plans to {Place} scan the precinct room to locate
-      the golden {Character}.
-    act2DisplayStory: Scanning {Place}, Officer Emma successfully located the golden
-      {Character}, receiving a promotion for her methodical work.
-    act2CharacterWords:
-    - Badge
-    - Report
-    - Pencil
-    act2PlaceWords:
-    - Neatly
-    - Fully
-    - Alertly
-    - Calmly
-  - characterWord: Emma
-    placeWord: Baker
-    displayStory: Emma runs her bakery with diligent precision, waking up before
-      dawn every morning to craft perfect, handmade bread.
-    act2Template: Baker Emma will {Place} prepare her special morning order using
-      her custom {Character}.
-    act2DisplayStory: Preparing {Place}, Baker Emma utilized her custom {Character}
-      to fulfill the huge morning order with flawless precision.
-    act2CharacterWords:
-    - Whisk
-    - Timer
-    - Scale
-    act2PlaceWords:
-    - Neatly
-    - Calmly
-    - Exactly
-    - Adeptly
+  maxHealth: 7
 --- !u!114 &1009087148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3904,11 +3786,11 @@ Transform:
   m_GameObject: {fileID: 1403720483}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.24939848, y: -0.9787135, z: -1421.5713}
+  m_LocalPosition: {x: -0.28697807, y: -0.33441758, z: 449.04333}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2029487715}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1406800464
 GameObject:
@@ -4661,11 +4543,11 @@ Transform:
   m_GameObject: {fileID: 1738855015}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.9624205, y: -2.644296, z: -1870.6146}
+  m_LocalPosition: {x: -5, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2029487715}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1806251015
 PrefabInstance:
@@ -5641,13 +5523,7 @@ Transform:
   m_LocalPosition: {x: -0.03757958, y: 0.64429593, z: 1870.6146}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1403720485}
-  - {fileID: 2081204410}
-  - {fileID: 1738855017}
-  - {fileID: 268033876}
-  - {fileID: 1009087143}
-  - {fileID: 97788019}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2049536760
@@ -5840,6 +5716,7 @@ MonoBehaviour:
   sentenceBoxSprite: {fileID: 1100216133}
   sentenceContentGroup: {fileID: 1242983687}
   collectionBoxGroup: {fileID: 0}
+  lockInButtonGroup: {fileID: 1438052054}
   tutorialAssemblyTemplate: I'll place some words {Character} and {Place} and press
     start when I want to collect the words for the spaces.
   arcadeUIGroup: {fileID: 666243884}
@@ -5859,11 +5736,11 @@ Transform:
   m_GameObject: {fileID: 2081204408}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.8120584, y: 0.6870655, z: -1870.6316}
+  m_LocalPosition: {x: -3.849638, y: 1.3313614, z: -0.016967773}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2029487715}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2130499184
 GameObject:
@@ -6096,3 +5973,9 @@ SceneRoots:
   - {fileID: 225227613}
   - {fileID: 1890243809}
   - {fileID: 1905115268}
+  - {fileID: 1403720485}
+  - {fileID: 2081204410}
+  - {fileID: 1738855017}
+  - {fileID: 268033876}
+  - {fileID: 1009087143}
+  - {fileID: 97788019}

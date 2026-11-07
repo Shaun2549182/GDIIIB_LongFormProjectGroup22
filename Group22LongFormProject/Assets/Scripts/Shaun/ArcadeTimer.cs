@@ -4,10 +4,25 @@ using TMPro;
 
 public class ArcadeTimer : MonoBehaviour
 {
+    public static ArcadeTimer Instance { get; private set; }
+
     [SerializeField] private float arcadeDuration = 30f;
     [SerializeField] private TextMeshProUGUI timerText;
 
     private Coroutine timerCoroutine;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     private void OnEnable()
     {
@@ -37,17 +52,36 @@ public class ArcadeTimer : MonoBehaviour
         }
     }
 
-    private void StartTimer()
+    public void StartTimer()
     {
-        if (timerCoroutine != null) StopCoroutine(timerCoroutine);
-        if (timerText != null) timerText.gameObject.SetActive(true);
+        StopTimer();
+
+        if (timerText != null)
+        {
+            timerText.gameObject.SetActive(true);
+            timerText.text = Mathf.CeilToInt(arcadeDuration).ToString("00");
+        }
+
         timerCoroutine = StartCoroutine(RunArcadeTimer());
     }
 
-    private void StopTimer()
+    public void StopTimer()
     {
-        if (timerCoroutine != null) StopCoroutine(timerCoroutine);
-        if (timerText != null) timerText.gameObject.SetActive(false);
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
+
+        if (timerText != null)
+        {
+            timerText.gameObject.SetActive(false);
+        }
+    }
+
+    public void ResetTimer()
+    {
+        StartTimer();
     }
 
     private IEnumerator RunArcadeTimer()
@@ -60,7 +94,7 @@ public class ArcadeTimer : MonoBehaviour
 
             if (timerText != null)
             {
-                timerText.text = Mathf.CeilToInt(timeRemaining).ToString("00");
+                timerText.text = Mathf.CeilToInt(Mathf.Max(0, timeRemaining)).ToString("00");
             }
 
             yield return null;

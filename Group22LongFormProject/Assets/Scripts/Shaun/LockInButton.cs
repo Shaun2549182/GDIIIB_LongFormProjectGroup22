@@ -1,98 +1,73 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
 [RequireComponent(typeof(CanvasGroup))]
 public class LockInButton : MonoBehaviour
 {
-    private Button button;
+    private Button lockInButton;
     private CanvasGroup canvasGroup;
 
     private void Awake()
     {
-        button = GetComponent<Button>();
-        canvasGroup = GetComponent<CanvasGroup>();
+        lockInButton = GetComponent<Button>();
 
-        HideImmediate();
-        button.onClick.AddListener(OnLockInClicked);
+        // Fetch or add CanvasGroup for clean show/hide without deactivating the GameObject
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+
+        lockInButton.onClick.AddListener(OnLockInClicked);
     }
 
-    private void OnEnable() => GameManager.OnPhaseChanged += HandlePhaseChanged;
-    private void OnDisable() => GameManager.OnPhaseChanged -= HandlePhaseChanged;
+    private void OnEnable()
+    {
+        GameManager.OnPhaseChanged += HandlePhaseChanged;
+        if (GameManager.Instance != null)
+        {
+            HandlePhaseChanged(GameManager.Instance.CurrentPhase);
+        }
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnPhaseChanged -= HandlePhaseChanged;
+    }
 
     private void HandlePhaseChanged(GamePhase newPhase)
     {
-        // Reveal ONLY when in Assembly phase AND the arcade phase was successfully passed
-        if (newPhase == GamePhase.Assembly && GameManager.Instance != null && GameManager.Instance.IsArcadeCompleted)
-        {
-            ShowButton();
-        }
-        else
-        {
-            HideImmediate();
-        }
-    }
+        bool isAssembly = (newPhase == GamePhase.Assembly);
+        bool arcadeDone = GameManager.Instance != null && GameManager.Instance.IsArcadeCompleted();
 
-    private void HideImmediate()
-    {
-        canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
-    }
+        bool showButton = isAssembly && arcadeDone;
 
-    private void ShowButton()
-    {
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
-        LeanTween.alphaCanvas(canvasGroup, 1f, 0.4f).setEase(LeanTweenType.easeOutQuad);
+        // Set visibility and interactivity via CanvasGroup instead of SetActive()
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = showButton ? 1f : 0f;
+            canvasGroup.interactable = showButton;
+            canvasGroup.blocksRaycasts = showButton;
+        }
     }
 
     private void OnLockInClicked()
     {
-        string currentScene = SceneManager.GetActiveScene().name;
+        bool isTutorial = SceneManager.GetActiveScene().name.IndexOf("Tutorial", System.StringComparison.OrdinalIgnoreCase) >= 0;
 
-        if (currentScene.IndexOf("Tutorial", System.StringComparison.OrdinalIgnoreCase) >= 0)
+        if (isTutorial)
         {
-            Debug.Log("[LockInButton] Tutorial complete! Transitioning to GameScene.");
-            SceneManager.LoadScene("GameScene");
-            return;
-        }
-
-        string chosenCharacter = "";
-        string chosenPlace = "";
-
-        SentenceSlotUI[] slots = FindObjectsByType<SentenceSlotUI>(FindObjectsSortMode.None);
-        foreach (var slot in slots)
-        {
-            WordCategory category = slot.GetSlotCategory();
-            string selectedWord = slot.GetSelectedWord();
-
-            if (category == WordCategory.Character)
-            {
-                chosenCharacter = selectedWord;
-            }
-            else if (category == WordCategory.Place)
-            {
-                chosenPlace = selectedWord;
-            }
-
-            if (slot.TryGetComponent<TMP_Dropdown>(out var dropdown))
-            {
-                dropdown.interactable = false;
-            }
-        }
-
-        canvasGroup.interactable = false;
-
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.LockInChoices(chosenCharacter, chosenPlace);
+            GameManager.Instance?.StartMainGame();
         }
         else
         {
-            SceneManager.LoadScene("DisplayScene");
+            // Fetch current act selections instead of defaulting to Act 1
+            string selectedChar = GameManager.Instance != null ? GameManager.Instance.GetCurrentActCharacterWord() : "";
+            string selectedPlace = GameManager.Instance != null ? GameManager.Instance.GetCurrentActPlaceWord() : "";
+
+            GameManager.Instance?.LockInChoices(selectedChar, selectedPlace);
         }
     }
 }
