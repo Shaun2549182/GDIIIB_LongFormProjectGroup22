@@ -1,126 +1,116 @@
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(TMP_Dropdown))]
-public class SentenceSlotUI : MonoBehaviour
+public class SentenceSlotUI : MonoBehaviour, IDropHandler
 {
-    [Header("Slot Settings")]
+    [Header("Slot Category Configuration")]
     [SerializeField] private WordCategory slotCategory = WordCategory.Any;
 
-    private TMP_Dropdown dropdown;
-    private bool isInitializing = false;
+    [Header("Color Coding Settings")]
+    [SerializeField] private Image slotBackgroundImage;
+    [SerializeField] private Color characterColor = new Color(0.2f, 0.4f, 0.8f, 0.6f);
+    [SerializeField] private Color placeColor = new Color(0.2f, 0.8f, 0.4f, 0.6f);
+    [SerializeField] private Color defaultColor = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+
+    [Header("Snap Position")]
+    [SerializeField] private Transform snapAnchor;
+
+    public DraggableWordBox CurrentSnappedBox { get; private set; }
+    public WordCategory GetSlotCategory() => slotCategory;
 
     private void Awake()
     {
-        dropdown = GetComponent<TMP_Dropdown>();
-        dropdown.interactable = false;
-
-        dropdown.onValueChanged.RemoveAllListeners();
-        dropdown.onValueChanged.AddListener(OnSelectionChanged);
+        if (slotBackgroundImage == null) slotBackgroundImage = GetComponent<Image>();
+        if (snapAnchor == null) snapAnchor = transform;
     }
-
-    private void OnEnable() => GameManager.OnPhaseChanged += HandlePhaseChanged;
-    private void OnDisable() => GameManager.OnPhaseChanged -= HandlePhaseChanged;
 
     public void InitializeSlot(WordCategory category)
     {
         slotCategory = category;
-        dropdown.interactable = false;
+        ApplyCategoryColor();
+    }
 
-        if (GameManager.Instance != null && GameManager.Instance.CurrentPhase == GamePhase.Assembly)
+    private void ApplyCategoryColor()
+    {
+        if (slotBackgroundImage == null) return;
+
+        switch (slotCategory)
         {
-            PopulateDropdownOptions();
-            dropdown.interactable = true;
+            case WordCategory.Character:
+                slotBackgroundImage.color = characterColor;
+                break;
+            case WordCategory.Place:
+                slotBackgroundImage.color = placeColor;
+                break;
+            default:
+                slotBackgroundImage.color = defaultColor;
+                break;
         }
     }
 
-    private void HandlePhaseChanged(GamePhase newPhase)
+    public void OnDrop(PointerEventData eventData)
     {
-        if (newPhase == GamePhase.Assembly)
-        {
-            PopulateDropdownOptions();
-            dropdown.interactable = true;
-        }
-        else
-        {
-            dropdown.interactable = false;
+        GameObject draggedObject = eventData.pointerDrag;
+        if (draggedObject == null) return;
 
-            // Only clear visual on phase exit during Act 1; preserve persisted visuals in Act 2
-            if (GameManager.Instance == null || GameManager.Instance.CurrentAct == 1)
+        if (draggedObject.TryGetComponent<DraggableWordBox>(out var wordBox))
+        {
+            if (wordBox.Category == slotCategory || slotCategory == WordCategory.Any)
             {
-                WordVisualManager.Instance?.ClearCategoryVisual(slotCategory);
+                if (CurrentSnappedBox != null && CurrentSnappedBox != wordBox)
+                {
+                    CurrentSnappedBox.ReturnToCollectionBox();
+                }
+
+                wordBox.SnapToSlot(this, snapAnchor.position);
+                CurrentSnappedBox = wordBox;
+
+                // Update scene visual anchor
+                WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, wordBox.WordText);
+
+                // Update GameManager & Ball state
+                if (slotCategory == WordCategory.Character)
+                {
+                    GameManager.Instance?.SetSelectedCharacter(wordBox.WordText);
+
+                    // Trigger ball color change & particle feedback burst
+                    BallController ball = FindFirstObjectByType<BallController>();
+                    ball?.TriggerCharacterChangeFeedback();
+                }
+                else if (slotCategory == WordCategory.Place)
+                {
+                    GameManager.Instance?.SetSelectedPlace(wordBox.WordText);
+                }
+            }
+            else
+            {
+                wordBox.ReturnToCollectionBox();
             }
         }
     }
 
-    public void PopulateDropdownOptions()
+    public void ClearSlot()
     {
-        if (dropdown == null || WordInventory.Instance == null) return;
-
-        if (slotCategory == WordCategory.Any)
+        if (slotCategory == WordCategory.Character)
         {
-            dropdown.ClearOptions();
-            dropdown.options.Add(new TMP_Dropdown.OptionData("Select Word"));
-            dropdown.interactable = false;
-            return;
+            GameManager.Instance?.SetSelectedCharacter(string.Empty);
+
+            // Reset ball back to default color
+            BallController ball = FindFirstObjectByType<BallController>();
+            ball?.ResetBall();
+        }
+        else if (slotCategory == WordCategory.Place)
+        {
+            GameManager.Instance?.SetSelectedPlace(string.Empty);
         }
 
-        isInitializing = true;
-        dropdown.onValueChanged.RemoveListener(OnSelectionChanged);
-
-        dropdown.ClearOptions();
-
-        List<string> collectedWords = WordInventory.Instance.GetWordsByCategory(slotCategory);
-
-        if (collectedWords == null || collectedWords.Count == 0)
-        {
-            dropdown.options.Add(new TMP_Dropdown.OptionData("No words found"));
-            dropdown.interactable = false;
-            // FIX: Do NOT call ClearCategoryVisual here. 
-            // Leaving anchors intact preserves the persisted Act 1 visuals on scene start.
-        }
-        else
-        {
-            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
-            foreach (string word in collectedWords)
-            {
-                options.Add(new TMP_Dropdown.OptionData(word));
-            }
-            dropdown.AddOptions(options);
-            dropdown.interactable = true;
-
-            dropdown.value = 0;
-            dropdown.RefreshShownValue();
-
-            // Set scene sprite visual only if a valid word exists
-            string defaultWord = GetSelectedWord();
-            if (!string.IsNullOrEmpty(defaultWord) && defaultWord != "No words found")
-            {
-                WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, defaultWord);
-            }
-        }
-
-        dropdown.onValueChanged.AddListener(OnSelectionChanged);
-        isInitializing = false;
-    }
-
-    private void OnSelectionChanged(int index)
-    {
-        if (isInitializing) return;
-
-        string selectedWord = GetSelectedWord();
-        if (!string.IsNullOrEmpty(selectedWord) && selectedWord != "No words found")
-        {
-            WordVisualManager.Instance?.UpdateCategoryVisual(slotCategory, selectedWord);
-        }
+        CurrentSnappedBox = null;
+        WordVisualManager.Instance?.ClearCategoryVisual(slotCategory);
     }
 
     public string GetSelectedWord()
     {
-        if (dropdown == null || dropdown.options.Count == 0) return string.Empty;
-        return dropdown.options[dropdown.value].text;
+        return CurrentSnappedBox != null ? CurrentSnappedBox.WordText : string.Empty;
     }
-
-    public WordCategory GetSlotCategory() => slotCategory;
 }

@@ -2,61 +2,51 @@ using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using TMPro;
 
 public class SentenceUIController : MonoBehaviour
 {
-    [Header("UI Containers")]
-    [Tooltip("Primary container used for all single-container scenes (e.g. GameScene), or top text for Tutorial.")]
-    [SerializeField] private Transform firstContainer;
-
-    [Tooltip("Secondary container used ONLY in Tutorial scene for dropdown slots and bottom text.")]
-    [SerializeField] private Transform secondContainer;
-
-    [Header("Prefabs")]
+    [Header("UI Containers & Prefabs")]
+    [SerializeField] private Transform sentenceContainer;
     [SerializeField] private GameObject textSegmentPrefab;
     [SerializeField] private GameObject slotPrefab;
 
     [Header("Typewriter Settings")]
     [SerializeField] private float typeSpeed = 0.05f;
 
-    private void OnEnable() => SentenceEvents.OnSentenceInit += BuildSentence;
-    private void OnDisable() => SentenceEvents.OnSentenceInit -= BuildSentence;
+    [Header("Scene-Specific Font Settings")]
+    [SerializeField] private bool overrideFontSize = false;
+    [SerializeField] private float customFontSize = 24f;
+
+    private void OnEnable()
+    {
+        SentenceEvents.OnSentenceInit -= BuildSentence;
+        SentenceEvents.OnSentenceInit += BuildSentence;
+    }
+
+    private void OnDisable()
+    {
+        SentenceEvents.OnSentenceInit -= BuildSentence;
+    }
 
     public void BuildSentence(string template)
     {
-        // Cancel active LeanTween animations on this object
+        // Stop any active typewriter tweens on this object to prevent ghost completion callbacks
         LeanTween.cancel(gameObject);
 
-        // Clear existing children from First Container
-        if (firstContainer != null)
+        // Destroy existing container children and cancel their individual tweens
+        foreach (Transform child in sentenceContainer)
         {
-            foreach (Transform child in firstContainer)
-            {
-                LeanTween.cancel(child.gameObject);
-                Destroy(child.gameObject);
-            }
+            LeanTween.cancel(child.gameObject);
+            Destroy(child.gameObject);
         }
 
-        // Clear existing children from Second Container if assigned
-        if (secondContainer != null)
-        {
-            foreach (Transform child in secondContainer)
-            {
-                LeanTween.cancel(child.gameObject);
-                Destroy(child.gameObject);
-            }
-        }
-
-        // Split template text into segments using placeholder tags ({Character}, {Place}, etc.)
+        // Split template text into segments using placeholder tags (e.g., {Character}, {Place})
         string[] parts = Regex.Split(template, @"(\{.*?\})");
-
-        bool reachedFirstSlot = false;
-        ProcessNextPart(parts, 0, reachedFirstSlot);
+        ProcessNextPart(parts, 0);
     }
 
-    private void ProcessNextPart(string[] parts, int index, bool reachedFirstSlot)
+    private void ProcessNextPart(string[] parts, int index)
     {
         if (index >= parts.Length)
         {
@@ -68,41 +58,16 @@ public class SentenceUIController : MonoBehaviour
 
         if (string.IsNullOrEmpty(part))
         {
-            ProcessNextPart(parts, index + 1, reachedFirstSlot);
+            ProcessNextPart(parts, index + 1);
             return;
         }
 
-        // Check if this part is a slot tag (e.g., {Character}, {Place})
-        bool isSlotTag = part.StartsWith("{") && part.EndsWith("}");
-
-        if (isSlotTag)
-        {
-            reachedFirstSlot = true;
-        }
-
-        // Only split across containers if active scene name is/contains "Tutorial" AND secondContainer is assigned
-        string currentScene = SceneManager.GetActiveScene().name;
-        bool isTutorialScene = currentScene.IndexOf("Tutorial", StringComparison.OrdinalIgnoreCase) >= 0;
-        bool useTwoContainers = isTutorialScene && (secondContainer != null);
-
-        // Determine target container
-        Transform targetContainer;
-        if (useTwoContainers && reachedFirstSlot)
-        {
-            targetContainer = secondContainer;
-        }
-        else
-        {
-            targetContainer = (firstContainer != null) ? firstContainer : transform;
-        }
-
         // Handle Slot Dropdowns ({Character}, {Place}, etc.)
-        if (isSlotTag)
+        if (part.StartsWith("{") && part.EndsWith("}"))
         {
-            GameObject slotObj = Instantiate(slotPrefab, targetContainer);
+            GameObject slotObj = Instantiate(slotPrefab, sentenceContainer);
             WordCategory category = ParseCategoryFromTag(part);
 
-            // Check root and child objects for SentenceSlotUI component
             SentenceSlotUI slotUI = slotObj.GetComponent<SentenceSlotUI>();
             if (slotUI == null)
             {
@@ -118,14 +83,21 @@ public class SentenceUIController : MonoBehaviour
                 Debug.LogError($"[SentenceUIController] SentenceSlotUI missing on {slotPrefab.name}!");
             }
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(targetContainer as RectTransform);
-            ProcessNextPart(parts, index + 1, reachedFirstSlot);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(sentenceContainer as RectTransform);
+            ProcessNextPart(parts, index + 1);
         }
         // Handle Standard Typewritten Text
         else
         {
-            GameObject textObj = Instantiate(textSegmentPrefab, targetContainer);
+            GameObject textObj = Instantiate(textSegmentPrefab, sentenceContainer);
             TextMeshProUGUI tmpText = textObj.GetComponent<TextMeshProUGUI>();
+
+            // Apply scene-specific font size override if enabled
+            if (overrideFontSize && tmpText != null)
+            {
+                tmpText.fontSize = customFontSize;
+            }
+
             tmpText.text = string.Empty;
 
             float totalDuration = part.Length * typeSpeed;
@@ -133,22 +105,23 @@ public class SentenceUIController : MonoBehaviour
             LeanTween.value(gameObject, 0f, part.Length, totalDuration)
                 .setOnUpdate((float val) =>
                 {
+                    if (tmpText == null) return;
                     int charCount = Mathf.Clamp(Mathf.FloorToInt(val), 0, part.Length);
                     tmpText.text = part.Substring(0, charCount);
-                    LayoutRebuilder.ForceRebuildLayoutImmediate(targetContainer as RectTransform);
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(sentenceContainer as RectTransform);
                 })
                 .setOnComplete(() =>
                 {
+                    if (tmpText == null) return;
                     tmpText.text = part;
-                    LayoutRebuilder.ForceRebuildLayoutImmediate(targetContainer as RectTransform);
-                    ProcessNextPart(parts, index + 1, reachedFirstSlot);
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(sentenceContainer as RectTransform);
+                    ProcessNextPart(parts, index + 1);
                 });
         }
     }
 
     private WordCategory ParseCategoryFromTag(string tag)
     {
-        // Strip curly braces: "{Character}" -> "Character"
         string cleanTag = tag.Trim('{', '}').Trim();
 
         if (Enum.TryParse<WordCategory>(cleanTag, true, out var category))

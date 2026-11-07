@@ -6,7 +6,7 @@ public class MenuController : MonoBehaviour
     // Method 1: Loads the scene named "Tutorial"
     public void LoadTutorial()
     {
-        SceneManager.LoadScene("Tutorial");
+        SceneManager.LoadScene("IntroductionScene");
     }
 
     public void LoadAct1()
