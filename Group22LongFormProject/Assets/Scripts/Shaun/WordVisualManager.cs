@@ -7,14 +7,14 @@ using UnityEngine.SceneManagement;
 public struct WordVisualMapping
 {
     public string wordText;
-    public GameObject visualPrefab; // Square or Triangle prefab
+    public GameObject visualPrefab; // Visual prefab / model / sprite container
 }
 
 public class WordVisualManager : MonoBehaviour
 {
     public static WordVisualManager Instance { get; private set; }
 
-    [Header("Main Scene Display Anchors (Fallback Inspector References)")]
+    [Header("Main Scene Display Anchors")]
     [SerializeField] private Transform characterSceneAnchor;
     [SerializeField] private Transform placeSceneAnchor;
 
@@ -45,15 +45,18 @@ public class WordVisualManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Clear destroyed visual instance references from previous scene
+        // 1. Clear references to destroyed instances from previous scene
         activeInstances.Clear();
 
-        // Relocate visual anchors in newly loaded scene
+        // 2. Locate anchors in the newly loaded scene
         RebindSceneAnchors();
+
+        // 3. Automatically restore Act 1 selections in Act 2 scenes or display scenes
+        RestorePersistedVisuals();
     }
 
     /// <summary>
-    /// Searches active scene for anchor objects named "CharacterAnchor" and "PlaceAnchor"
+    /// Searches the active scene hierarchy for GameObjects named "CharacterAnchor" and "PlaceAnchor"
     /// </summary>
     public void RebindSceneAnchors()
     {
@@ -61,22 +64,33 @@ public class WordVisualManager : MonoBehaviour
         if (charObj != null)
         {
             characterSceneAnchor = charObj.transform;
-            Debug.Log("[WordVisualManager] Successfully bound 'CharacterAnchor'.");
-        }
-        else
-        {
-            Debug.LogWarning("[WordVisualManager] Failed to find 'CharacterAnchor' in current scene!");
         }
 
         GameObject placeObj = GameObject.Find("PlaceAnchor");
         if (placeObj != null)
         {
             placeSceneAnchor = placeObj.transform;
-            Debug.Log("[WordVisualManager] Successfully bound 'PlaceAnchor'.");
         }
-        else
+    }
+
+    /// <summary>
+    /// Re-instantiates saved character and place visual prefabs when transitioning across scenes or acts.
+    /// </summary>
+    public void RestorePersistedVisuals()
+    {
+        if (GameManager.Instance == null) return;
+
+        string savedCharacter = GameManager.Instance.SelectedCharacterWord;
+        string savedPlace = GameManager.Instance.SelectedPlaceWord;
+
+        if (!string.IsNullOrEmpty(savedCharacter) && characterSceneAnchor != null)
         {
-            Debug.LogWarning("[WordVisualManager] Failed to find 'PlaceAnchor' in current scene!");
+            SpawnVisualAtAnchor(savedCharacter, WordCategory.Character, characterSceneAnchor);
+        }
+
+        if (!string.IsNullOrEmpty(savedPlace) && placeSceneAnchor != null)
+        {
+            SpawnVisualAtAnchor(savedPlace, WordCategory.Place, placeSceneAnchor);
         }
     }
 
@@ -87,7 +101,7 @@ public class WordVisualManager : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(mapping.wordText) && mapping.visualPrefab != null)
             {
-                mappingDict[mapping.wordText] = mapping.visualPrefab;
+                mappingDict[mapping.wordText.Trim()] = mapping.visualPrefab;
             }
         }
     }
@@ -97,39 +111,26 @@ public class WordVisualManager : MonoBehaviour
         if (string.IsNullOrEmpty(word)) return null;
         if (mappingDict == null) InitializeDictionary();
 
-        mappingDict.TryGetValue(word, out GameObject prefab);
+        mappingDict.TryGetValue(word.Trim(), out GameObject prefab);
         return prefab;
     }
 
-    public void UpdateCategoryVisual(WordCategory category, string word)
-    {
-        Transform targetAnchor = GetAnchorForCategory(category);
-        SpawnVisualAtAnchor(word, category, targetAnchor);
-    }
 
-    /// <summary>
-    /// Spawns a word visual prefab under a specific anchor transform.
-    /// </summary>
+    
+
     public GameObject SpawnVisualAtAnchor(string word, WordCategory category, Transform targetAnchor, bool isDisplayPhase = false)
     {
         ClearCategoryVisual(category);
 
-        if (targetAnchor == null)
+        if (targetAnchor == null || string.IsNullOrEmpty(word) || word == "No words found")
         {
-            Debug.LogError($"[WordVisualManager] Aborted: Anchor for '{category}' is NULL or destroyed!");
-            return null;
-        }
-
-        if (string.IsNullOrEmpty(word) || word == "No words found")
-        {
-            Debug.LogWarning($"[WordVisualManager] Aborted: Word string is invalid ('{word}').");
             return null;
         }
 
         GameObject prefab = GetPrefabForWord(word);
         if (prefab == null)
         {
-            Debug.LogError($"[WordVisualManager] Aborted: No prefab mapping found for word '{word}' in mappingDict!");
+            Debug.LogWarning($"[WordVisualManager] No visual prefab mapping found for word '{word}'!");
             return null;
         }
 
@@ -139,8 +140,13 @@ public class WordVisualManager : MonoBehaviour
         instance.transform.localScale = Vector3.one;
 
         activeInstances[category] = instance;
-        Debug.Log($"[WordVisualManager] Successfully instantiated '{prefab.name}' under anchor '{targetAnchor.name}'.");
         return instance;
+    }
+
+    public void UpdateCategoryVisual(WordCategory category, string word)
+    {
+        Transform targetAnchor = GetAnchorForCategory(category);
+        SpawnVisualAtAnchor(word, category, targetAnchor, isDisplayPhase: false);
     }
 
     public void ClearCategoryVisual(WordCategory category)

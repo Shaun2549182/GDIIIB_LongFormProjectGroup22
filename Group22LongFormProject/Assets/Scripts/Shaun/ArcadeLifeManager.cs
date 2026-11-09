@@ -1,35 +1,69 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 
 public class ArcadeLifeManager : MonoBehaviour
 {
+    public static ArcadeLifeManager Instance { get; private set; }
+
+    [Header("Local Arcade Settings")]
     [SerializeField] private int startingLives = 3;
     [SerializeField] private List<GameObject> healthPointObjects;
     [SerializeField] private BallController ballController;
 
     private int currentLives;
+    private bool isProcessingDeath = false;
 
-    private void Start()
+    private void Awake()
     {
-        // Check if current scene is Tutorial
-        bool isTutorial = SceneManager.GetActiveScene().name.IndexOf("Tutorial", System.StringComparison.OrdinalIgnoreCase) >= 0;
+        if (Instance == null) Instance = this;
+    }
 
-        if (isTutorial)
+    private void OnEnable() => GameManager.OnPhaseChanged += HandlePhaseChanged;
+    private void OnDisable() => GameManager.OnPhaseChanged -= HandlePhaseChanged;
+
+    private void HandlePhaseChanged(GamePhase newPhase)
+    {
+        if (newPhase == GamePhase.Arcade)
         {
-            currentLives = 999;
+            ResetLives();
         }
-        else
+    }
+
+    /// <summary>
+    /// Restores local attempt lives and re-enables UI heart icons.
+    /// </summary>
+    public void ResetLives()
+    {
+        bool isTutorial = SceneManager.GetActiveScene().name.IndexOf("Tutorial", System.StringComparison.OrdinalIgnoreCase) >= 0;
+        currentLives = isTutorial ? 2 : startingLives;
+        isProcessingDeath = false;
+
+        if (healthPointObjects != null)
         {
-            currentLives = startingLives;
+            for (int i = 0; i < healthPointObjects.Count; i++)
+            {
+                if (healthPointObjects[i] != null)
+                {
+                    healthPointObjects[i].SetActive(i < currentLives);
+                }
+            }
+        }
+
+        if (ballController == null)
+        {
+            ballController = FindFirstObjectByType<BallController>();
         }
     }
 
     public void OnBallFell()
     {
+        // Guard against multiple trigger collisions in the same frame
+        if (isProcessingDeath) return;
+
         currentLives--;
 
-        // Hide UI heart/life icons if within range
+        // Hide UI heart icon for lost hit
         if (currentLives >= 0 && healthPointObjects != null && currentLives < healthPointObjects.Count)
         {
             if (healthPointObjects[currentLives] != null)
@@ -38,15 +72,13 @@ public class ArcadeLifeManager : MonoBehaviour
             }
         }
 
+        // Reset ball position back to paddle
+        ballController?.ResetBall();
+
         if (currentLives <= 0)
         {
-            // Out of lives: End Arcade phase
+            isProcessingDeath = true;
             GameManager.Instance?.CompleteArcadePhase();
-        }
-        else
-        {
-            // Reset ball for next attempt
-            ballController?.ResetBall();
         }
     }
 }

@@ -2,45 +2,42 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-[RequireComponent(typeof(CanvasGroup))]
-public class StartArcadeButton : MonoBehaviour 
+public class StartArcadeButton : MonoBehaviour
 {
-    private Button button;
-    private CanvasGroup canvasGroup;
+    private Button startButton;
 
-    private void Awake() 
+    private void Awake()
     {
-        button = GetComponent<Button>();
-        canvasGroup = GetComponent<CanvasGroup>();
-        
-        // Make invisible and non-interactive immediately on start
-        HideButtonImmediate();
-        
-        button.onClick.AddListener(OnButtonClicked);
+        startButton = GetComponent<Button>();
+        startButton.onClick.AddListener(OnStartButtonClicked);
     }
 
-    private void OnEnable() => SentenceEvents.OnSentenceConstructionComplete += ShowButton;
-    private void OnDisable() => SentenceEvents.OnSentenceConstructionComplete -= ShowButton;
-
-    private void HideButtonImmediate() 
+    private void OnEnable()
     {
-        canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
+        GameManager.OnPhaseChanged += HandlePhaseChanged;
+
+        if (GameManager.Instance != null)
+        {
+            HandlePhaseChanged(GameManager.Instance.CurrentPhase);
+        }
     }
 
-    private void ShowButton() 
+    private void OnDisable()
     {
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
-
-        // Smooth LeanTween fade-in
-        LeanTween.alphaCanvas(canvasGroup, 1f, 0.4f).setEase(LeanTweenType.easeOutQuad);
+        GameManager.OnPhaseChanged -= HandlePhaseChanged;
     }
 
-    private void OnButtonClicked() 
+    private void HandlePhaseChanged(GamePhase newPhase)
     {
-        HideButtonImmediate();
-        GameManager.Instance.ChangePhase(GamePhase.Arcade);
+        // Added () to call !GameManager.Instance.IsArcadeCompleted()
+        bool isAssembly = (newPhase == GamePhase.Assembly);
+        bool arcadeNotDone = GameManager.Instance != null && !GameManager.Instance.IsArcadeCompleted();
+
+        gameObject.SetActive(isAssembly && arcadeNotDone);
+    }
+
+    private void OnStartButtonClicked()
+    {
+        GameManager.Instance?.ChangePhase(GamePhase.Arcade);
     }
 }

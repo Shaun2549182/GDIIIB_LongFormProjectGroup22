@@ -16,7 +16,17 @@ public class PaddleController : MonoBehaviour
         startPosition = transform.position;
     }
 
-    private void OnEnable() => GameManager.OnPhaseChanged += HandlePhaseChanged;
+    private void OnEnable()
+    {
+        GameManager.OnPhaseChanged += HandlePhaseChanged;
+
+        // Immediately sync with the current phase when enabled
+        if (GameManager.Instance != null)
+        {
+            HandlePhaseChanged(GameManager.Instance.CurrentPhase);
+        }
+    }
+
     private void OnDisable() => GameManager.OnPhaseChanged -= HandlePhaseChanged;
 
     private void HandlePhaseChanged(GamePhase newPhase)

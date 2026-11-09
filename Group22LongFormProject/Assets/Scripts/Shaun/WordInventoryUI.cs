@@ -3,47 +3,55 @@ using TMPro;
 
 public class WordInventoryUI : MonoBehaviour
 {
-    [Header("List Anchors")]
+    [Header("List Anchors (Vertical Layout Groups)")]
     [SerializeField] private Transform characterListAnchor;
     [SerializeField] private Transform placeListAnchor;
 
     [Header("UI Prefab")]
     [SerializeField] private GameObject wordTextItemPrefab;
 
-    private void OnEnable() => WordInventory.OnWordCollected += AddWordToList;
-    private void OnDisable() => WordInventory.OnWordCollected -= AddWordToList;
+    private void OnEnable()
+    {
+        WordInventory.OnWordCollected += AddWordToList;
+        WordInventory.OnInventoryCleared += ClearUILists;
+    }
+
+    private void OnDisable()
+    {
+        WordInventory.OnWordCollected -= AddWordToList;
+        WordInventory.OnInventoryCleared -= ClearUILists;
+    }
 
     private void AddWordToList(string wordText, WordCategory category)
     {
-        Transform targetAnchor = null;
+        Transform targetAnchor = (category == WordCategory.Character) ? characterListAnchor : placeListAnchor;
 
-        if (category == WordCategory.Character)
+        if (targetAnchor != null && wordTextItemPrefab != null)
         {
-            targetAnchor = characterListAnchor;
+            GameObject newItem = Instantiate(wordTextItemPrefab, targetAnchor);
+            if (newItem.TryGetComponent<TextMeshProUGUI>(out var tmpText))
+            {
+                tmpText.text = wordText;
+            }
         }
-        else if (category == WordCategory.Place)
-        {
-            targetAnchor = placeListAnchor;
-        }
+    }
 
-        if (targetAnchor == null)
-        {
-            Debug.LogWarning($"[WordInventoryUI] Target anchor for category '{category}' is missing or unassigned!");
-            return;
-        }
+    /// <summary>
+    /// Destroys all UI text items inside the vertical group anchors when retrying or resetting.
+    /// </summary>
+    public void ClearUILists()
+    {
+        ClearAnchorChildren(characterListAnchor);
+        ClearAnchorChildren(placeListAnchor);
+    }
 
-        if (wordTextItemPrefab == null)
-        {
-            Debug.LogWarning("[WordInventoryUI] wordTextItemPrefab is missing in the Inspector!");
-            return;
-        }
+    private void ClearAnchorChildren(Transform anchor)
+    {
+        if (anchor == null) return;
 
-        GameObject newItem = Instantiate(wordTextItemPrefab, targetAnchor);
-
-        // Flexible TMP lookup (handles both UI and standard TMP text components)
-        if (newItem.TryGetComponent<TMP_Text>(out var tmpText))
+        for (int i = anchor.childCount - 1; i >= 0; i--)
         {
-            tmpText.text = wordText;
+            Destroy(anchor.GetChild(i).gameObject);
         }
     }
 }

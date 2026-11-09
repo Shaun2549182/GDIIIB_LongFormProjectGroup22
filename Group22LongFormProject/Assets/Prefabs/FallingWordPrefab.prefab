@@ -47,9 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ec5f7bbcb6a02242bfbfaaf410f15f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallSpeed: 3
+  fallSpeed: 1.5
   destroyYThreshold: -6
-  labelText: {fileID: 0}
+  labelText3D: {fileID: 0}
+  labelTextUI: {fileID: 0}
 --- !u!61 &275172390069336621
 BoxCollider2D:
   m_ObjectHideFlags: 0

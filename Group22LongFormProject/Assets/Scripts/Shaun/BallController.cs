@@ -6,6 +6,7 @@ public class BallController : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private GameObject selectionParticlePrefab;
 
     [Header("Base Settings")]
     [SerializeField] private float initialSpeed = 10f;
@@ -17,7 +18,7 @@ public class BallController : MonoBehaviour
     [SerializeField] private Color benColor = new Color(1f, 0.41f, 0.71f);   // Ben (Hot Pink)
     [SerializeField] private Color emmaColor = new Color(0.2f, 0.6f, 1f);     // Emma (Bright Blue)
 
-    [Header("Juice / Screen Shake")]
+    [Header("Screen Shake")]
     [SerializeField] private float wallShakeDuration = 0.12f;
     [SerializeField] private float wallShakeMagnitude = 0.1f;
 
@@ -54,7 +55,17 @@ public class BallController : MonoBehaviour
         ApplyCharacterModifiers();
     }
 
-    private void OnEnable() => GameManager.OnPhaseChanged += HandlePhaseChanged;
+    private void OnEnable()
+    {
+        GameManager.OnPhaseChanged += HandlePhaseChanged;
+
+        // Immediately sync with the current phase when enabled
+        if (GameManager.Instance != null)
+        {
+            HandlePhaseChanged(GameManager.Instance.CurrentPhase);
+        }
+    }
+
     private void OnDisable() => GameManager.OnPhaseChanged -= HandlePhaseChanged;
 
     private void HandlePhaseChanged(GamePhase newPhase)
@@ -92,6 +103,19 @@ public class BallController : MonoBehaviour
         if (paddleTransform != null)
         {
             transform.position = paddleTransform.position + paddleOffset;
+        }
+    }
+
+    public void TriggerCharacterChangeFeedback()
+    {
+        // 1. Instantly update ball color & scale
+        ApplyCharacterModifiers();
+
+        // 2. Spawn the brick destroy particle effect at the ball's location
+        if (selectionParticlePrefab != null)
+        {
+            GameObject particles = Instantiate(selectionParticlePrefab, transform.position, Quaternion.identity);
+            Destroy(particles, 2f); // Clean up after 2 seconds
         }
     }
 
@@ -196,11 +220,7 @@ public class BallController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!isActive || !isLaunched) return;
-
-        if (collision.gameObject.CompareTag("Wall"))
-        {
-            CameraShake.Instance?.Shake(wallShakeDuration, wallShakeMagnitude);
-        }
+        CameraShake.Instance?.Shake(wallShakeDuration, wallShakeMagnitude);
 
         if (collision.gameObject.CompareTag("Paddle"))
         {
