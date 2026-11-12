@@ -1,57 +1,67 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-public class GameManagerBehaviour : MonoBehaviour
+using UnityEngine.InputSystem;
+
+public class PauseMenu : MonoBehaviour
 {
+    [Header("Pause Menu UI")]
+    public GameObject pauseMenuUI;
 
-    [SerializeField]
-    GameObject pauseMenu;
+    [Header("Pause Settings")]
+    public bool isPaused = false;
 
-    public static bool isPaused;
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
-        pauseMenu.SetActive(false);
-        isPaused = false;
+        pauseMenuUI.SetActive(false);
+        Time.timeScale = 1f;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Keyboard.current != null &&
+            Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            if (!isPaused)
-            {
-                PauseGame();
-            }
-            else
-            {
+            if (isPaused)
                 ResumeGame();
-            }
+            else
+                PauseGame();
         }
     }
 
-    private void PauseGame()
+    public void PauseGame()
     {
-        pauseMenu.SetActive(true);
-        isPaused = true;
+        pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        isPaused = true;
     }
 
     public void ResumeGame()
     {
-        pauseMenu.SetActive(false);
-        isPaused = false;
+        pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
+        isPaused = false;
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        isPaused = false;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void MainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(0);
+        isPaused = false;
+
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void QuitGame()
+    {
+        Time.timeScale = 1f;
+        Application.Quit();
     }
 }
