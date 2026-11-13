@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
@@ -8,25 +7,33 @@ public class pauseMenu : MonoBehaviour
     [Header("Pause Menu UI")]
     public GameObject pauseMenuUI;
 
-    [Header("Pause Settings")]
-    public bool isPaused = false;
+    private bool isPaused = false;
 
     void Start()
     {
-        pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
+        isPaused = false;
+
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
     }
 
     void Update()
     {
+        // Detect ESC using the New Input System
         if (Keyboard.current != null &&
             Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            if (isPaused)
-                ResumeGame();
-            else
-                PauseGame();
+            TogglePause();
         }
+    }
+
+    public void TogglePause()
+    {
+        if (isPaused)
+            ResumeGame();
+        else
+            PauseGame();
     }
 
     public void PauseGame()
@@ -46,16 +53,12 @@ public class pauseMenu : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1f;
-        isPaused = false;
-
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void MainMenu()
     {
         Time.timeScale = 1f;
-        isPaused = false;
-
         SceneManager.LoadScene("MainMenu");
     }
 
