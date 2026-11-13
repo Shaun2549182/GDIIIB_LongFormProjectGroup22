@@ -2503,7 +2503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   draggableWordBoxPrefab: {fileID: 6645465648927628223, guid: 74c3208351d08574dbf3239bfab1fef7, type: 3}
   spawnAnchor: {fileID: 604170725}
-  horizontalVariance: 60
+  horizontalVariance: 10
   verticalDropOffset: 25
 --- !u!224 &942781639
 RectTransform:
@@ -5716,7 +5716,6 @@ MonoBehaviour:
   sentenceBoxSprite: {fileID: 1100216133}
   sentenceContentGroup: {fileID: 1242983687}
   collectionBoxGroup: {fileID: 0}
-  lockInButtonGroup: {fileID: 1438052054}
   tutorialAssemblyTemplate: I'll place some words {Character} and {Place} and press
     start when I want to collect the words for the spaces.
   arcadeUIGroup: {fileID: 666243884}
@@ -5725,6 +5724,8 @@ MonoBehaviour:
   postArcadeInstructionsGroup: {fileID: 1406800468}
   triangleSprite: {fileID: 1890243808}
   rectangleSprite: {fileID: 1905115267}
+  extraPostArcadeUIGroups: []
+  extraPostArcadeSprites: []
   fadeDuration: 0.5
   delayBetweenFades: 0.15
 --- !u!4 &2081204410

@@ -30,7 +30,7 @@ public class ArcadeRetryUI : MonoBehaviour
         if (canvasGroup != null) canvasGroup.alpha = 0f;
     }
 
-    public void ShowRetryPrompt(string message = "That's not right...")
+    public void ShowRetryPrompt(string message = "That's not quite right...")
     {
         if (promptText != null) promptText.text = message;
 

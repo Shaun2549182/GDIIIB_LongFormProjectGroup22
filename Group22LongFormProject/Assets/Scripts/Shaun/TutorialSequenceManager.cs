@@ -15,7 +15,6 @@ public class TutorialSequenceManager : MonoBehaviour
     [SerializeField] private SpriteRenderer sentenceBoxSprite;
     [SerializeField] private CanvasGroup sentenceContentGroup;
     [SerializeField] private CanvasGroup collectionBoxGroup;
-    [SerializeField] private CanvasGroup lockInButtonGroup; // FIX: Added Lock-In Button reference
 
     [TextArea(3, 5)]
     [SerializeField]
@@ -30,9 +29,11 @@ public class TutorialSequenceManager : MonoBehaviour
     [SerializeField] private CanvasGroup arcadeInstructionsGroup;     // Text 1: Arcade instructions
     [SerializeField] private CanvasGroup postArcadeInstructionsGroup; // Text 2: Completion instructions
 
-    [Header("5. Post-Arcade Extra Sprites")]
+    [Header("5. Post-Arcade Tutorial-Only Elements")]
     [SerializeField] private SpriteRenderer triangleSprite;          // Additional shape sprite 1
     [SerializeField] private SpriteRenderer rectangleSprite;         // Additional shape sprite 2
+    [SerializeField] private List<CanvasGroup> extraPostArcadeUIGroups = new List<CanvasGroup>();
+    [SerializeField] private List<SpriteRenderer> extraPostArcadeSprites = new List<SpriteRenderer>();
 
     [Header("Animation Timings")]
     [SerializeField] private float fadeDuration = 0.5f;
@@ -41,7 +42,8 @@ public class TutorialSequenceManager : MonoBehaviour
     private List<SpriteRenderer> arcadeSprites = new List<SpriteRenderer>();
     private List<TMP_Text> arcadeTexts = new List<TMP_Text>();
     private bool isTransitioning = false;
-    private bool hasCompletedArcade = false;
+    private bool hasEnteredArcade = false;
+    private bool hasRevealedPostArcade = false;
 
     private void Awake()
     {
@@ -59,20 +61,29 @@ public class TutorialSequenceManager : MonoBehaviour
             tutorialIntroGroup.transform.localPosition -= new Vector3(0f, introSlideOffset, 0f);
         }
 
-        // 2. Hide Assembly Elements & Lock-In Button initially
+        // 2. Hide Assembly Elements initially
         SetSpriteAlpha(sentenceBoxSprite, 0f);
         SetCanvasGroupState(sentenceContentGroup, visible: false);
         SetCanvasGroupState(collectionBoxGroup, visible: false);
-        SetCanvasGroupState(lockInButtonGroup, visible: false); // FIX: Ensure lock-in button starts hidden
 
         // 3. Hide Arcade Elements & Instructions initially
         SetCanvasGroupState(arcadeUIGroup, visible: false);
         SetCanvasGroupState(arcadeInstructionsGroup, visible: false);
         SetCanvasGroupState(postArcadeInstructionsGroup, visible: false);
 
-        // 4. Hide Post-Arcade Extra Sprites initially
+        // 4. Hide Post-Arcade Tutorial-Only Elements initially
         SetSpriteAlpha(triangleSprite, 0f);
         SetSpriteAlpha(rectangleSprite, 0f);
+
+        foreach (var group in extraPostArcadeUIGroups)
+        {
+            SetCanvasGroupState(group, visible: false);
+        }
+
+        foreach (var sprite in extraPostArcadeSprites)
+        {
+            SetSpriteAlpha(sprite, 0f);
+        }
 
         if (arcadeWorldObjectsContainer != null)
         {
@@ -153,12 +164,17 @@ public class TutorialSequenceManager : MonoBehaviour
     {
         if (newPhase == GamePhase.Arcade)
         {
-            hasCompletedArcade = true;
+            hasEnteredArcade = true;
             StartCoroutine(TransitionToArcadePhase());
         }
-        else if (newPhase == GamePhase.Assembly && hasCompletedArcade)
+        else if (newPhase == GamePhase.Assembly && hasEnteredArcade && !hasRevealedPostArcade)
         {
-            StartCoroutine(TransitionToPostArcadeAssembly());
+            // Only reveal tutorial post-arcade elements if the Arcade phase actually succeeded
+            if (GameManager.Instance != null && GameManager.Instance.IsArcadeCompleted())
+            {
+                hasRevealedPostArcade = true;
+                StartCoroutine(TransitionToPostArcadeAssembly());
+            }
         }
     }
 
@@ -201,14 +217,30 @@ public class TutorialSequenceManager : MonoBehaviour
 
         yield return new WaitForSeconds(delayBetweenFades);
 
-        // 2. Fade in Post-Arcade Text, Lock-In Button & Extra Sprites simultaneously
+        // 2. Fade in Tutorial Post-Arcade Instructions & Extra Tutorial Elements only
+        // (LockInButton remains hidden and manages itself once both sentence slots are filled)
         SetCanvasGroupState(postArcadeInstructionsGroup, visible: true);
-        SetCanvasGroupState(lockInButtonGroup, visible: true); // FIX: Enable Lock-In Button CanvasGroup
+        StartCoroutine(FadeGroup(postArcadeInstructionsGroup, 0f, 1f));
 
         StartCoroutine(FadeSprite(triangleSprite, 0f, 1f));
         StartCoroutine(FadeSprite(rectangleSprite, 0f, 1f));
-        StartCoroutine(FadeGroup(lockInButtonGroup, 0f, 1f)); // FIX: Animate Lock-In Button fade-in
-        yield return StartCoroutine(FadeGroup(postArcadeInstructionsGroup, 0f, 1f));
+
+        foreach (var group in extraPostArcadeUIGroups)
+        {
+            if (group != null)
+            {
+                SetCanvasGroupState(group, visible: true);
+                StartCoroutine(FadeGroup(group, 0f, 1f));
+            }
+        }
+
+        foreach (var sprite in extraPostArcadeSprites)
+        {
+            if (sprite != null)
+            {
+                StartCoroutine(FadeSprite(sprite, 0f, 1f));
+            }
+        }
     }
 
     // --- HELPER METHODS ---

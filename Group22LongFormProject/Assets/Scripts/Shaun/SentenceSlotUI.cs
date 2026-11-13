@@ -82,6 +82,8 @@ public class SentenceSlotUI : MonoBehaviour, IDropHandler
                 {
                     GameManager.Instance?.SetSelectedPlace(wordBox.WordText);
                 }
+
+                SentenceEvents.TriggerSlotUpdated(slotCategory, wordBox.WordText);
             }
             else
             {
@@ -107,6 +109,8 @@ public class SentenceSlotUI : MonoBehaviour, IDropHandler
 
         CurrentSnappedBox = null;
         WordVisualManager.Instance?.ClearCategoryVisual(slotCategory);
+
+        SentenceEvents.TriggerSlotUpdated(slotCategory, string.Empty);
     }
 
     public string GetSelectedWord()

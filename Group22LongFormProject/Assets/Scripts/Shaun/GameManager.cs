@@ -416,14 +416,14 @@ public class GameManager : MonoBehaviour
 
             if (isTutorial)
             {
-                ArcadeRetryUI.Instance?.ShowRetryPrompt("Try Again!");
+                ArcadeRetryUI.Instance?.ShowRetryPrompt("That's not quite right...");
                 ArcadeStageController.Instance?.ResetStage();
             }
             else
             {
                 if (DeductLife())
                 {
-                    ArcadeRetryUI.Instance?.ShowRetryPrompt("Try Again!");
+                    ArcadeRetryUI.Instance?.ShowRetryPrompt("That's not quite right...");
                     ArcadeStageController.Instance?.ResetStage();
                 }
             }

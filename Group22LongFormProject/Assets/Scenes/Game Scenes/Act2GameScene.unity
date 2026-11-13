@@ -1455,7 +1455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   draggableWordBoxPrefab: {fileID: 6645465648927628223, guid: 74c3208351d08574dbf3239bfab1fef7, type: 3}
   spawnAnchor: {fileID: 1698632877}
-  horizontalVariance: 90
+  horizontalVariance: 10
   verticalDropOffset: 25
 --- !u!1 &467631289
 GameObject:
