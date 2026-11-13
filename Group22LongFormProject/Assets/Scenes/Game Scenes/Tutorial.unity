@@ -2735,6 +2735,8 @@ MonoBehaviour:
   act3DisplaySceneName: Act3DisplayScene
   gameOverSceneName: GameOverScene
   maxHealth: 7
+  largeLocationBrickScale: 1.1
+  smallLocationBrickScale: 0.9
 --- !u!114 &1009087148
 MonoBehaviour:
   m_ObjectHideFlags: 0

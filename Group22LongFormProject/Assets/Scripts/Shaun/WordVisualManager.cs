@@ -21,9 +21,8 @@ public class WordVisualManager : MonoBehaviour
     [Header("Act 2 Character Anchor (Discovered Item)")]
     [SerializeField] private Transform act2CharacterAnchor;
 
-    [Header("Act 3 Anchors")]
+    [Header("Act 3 Character Anchor (Secondary Character)")]
     [SerializeField] private Transform act3CharacterAnchor;
-    [SerializeField] private Transform act3PlaceAnchor;
 
     [Header("Word to Sprite Prefab Mappings")]
     [SerializeField] private List<WordVisualMapping> mappings = new List<WordVisualMapping>();
@@ -77,17 +76,13 @@ public class WordVisualManager : MonoBehaviour
         GameObject a2Char = GameObject.Find("Act2CharacterAnchor");
         if (a2Char != null) act2CharacterAnchor = a2Char.transform;
 
-        // Act 3 Anchors
+        // Act 3 Character Anchor (Secondary Character only)
         GameObject a3Char = GameObject.Find("Act3CharacterAnchor");
         if (a3Char != null) act3CharacterAnchor = a3Char.transform;
-
-        GameObject a3Place = GameObject.Find("Act3PlaceAnchor");
-        if (a3Place != null) act3PlaceAnchor = a3Place.transform;
     }
 
     /// <summary>
-    /// Restores sprites across acts, using the Act 2 location on the shared Place anchor when chosen,
-    /// or falling back to the Act 1 location if Act 2's location slot is empty.
+    /// Restores sprites across acts (2 in Act 1, 3 active anchors in Act 2, 4 active anchors in Act 3).
     /// </summary>
     public void RestorePersistedVisuals()
     {
@@ -111,11 +106,10 @@ public class WordVisualManager : MonoBehaviour
             SpawnIfPresent(GameManager.Instance.Act2SelectedCharacterWord, WordCategory.Character, 2);
         }
 
-        // 4. Act 3 Character & Outcome
+        // 4. Act 3 Secondary Character (Act 3 Action/Outcome has no sprite)
         if (currentAct >= 3)
         {
             SpawnIfPresent(GameManager.Instance.Act3SelectedCharacterWord, WordCategory.Character, 3);
-            SpawnIfPresent(GameManager.Instance.Act3SelectedPlaceWord, WordCategory.Place, 3);
         }
     }
 
@@ -180,6 +174,9 @@ public class WordVisualManager : MonoBehaviour
     {
         int currentAct = GameManager.Instance != null ? GameManager.Instance.CurrentAct : 1;
 
+        // Act 3 Place words represent the ending action/outcome and do not spawn a sprite
+        if (currentAct >= 3 && category == WordCategory.Place) return;
+
         // Route Act 2 Place words to the same shared Place anchor (slot key 1)
         int visualSlotAct = (category == WordCategory.Place && currentAct == 2) ? 1 : currentAct;
 
@@ -191,6 +188,10 @@ public class WordVisualManager : MonoBehaviour
     {
         int currentAct = GameManager.Instance != null ? GameManager.Instance.CurrentAct : 1;
         int targetAct = act < 0 ? currentAct : act;
+
+        // Act 3 Place words have no sprite to clear
+        if (targetAct >= 3 && category == WordCategory.Place) return;
+
         int visualSlotAct = (category == WordCategory.Place && targetAct == 2) ? 1 : targetAct;
 
         DestroyVisualInstance(category, visualSlotAct);
@@ -238,20 +239,18 @@ public class WordVisualManager : MonoBehaviour
             (1, WordCategory.Place) => sharedPlaceAnchor,
             (2, WordCategory.Character) => act2CharacterAnchor,
             (3, WordCategory.Character) => act3CharacterAnchor,
-            (3, WordCategory.Place) => act3PlaceAnchor,
             _ => null
         };
     }
 
-    private void RebindIfMissing(int visualSlotAct, WordCategory category)
+    private void RebindIfMissing(int act, WordCategory category)
     {
-        bool missing = (visualSlotAct, category) switch
+        bool missing = (act, category) switch
         {
             (1, WordCategory.Character) => act1CharacterAnchor == null,
             (1, WordCategory.Place) => sharedPlaceAnchor == null,
             (2, WordCategory.Character) => act2CharacterAnchor == null,
             (3, WordCategory.Character) => act3CharacterAnchor == null,
-            (3, WordCategory.Place) => act3PlaceAnchor == null,
             _ => false
         };
 

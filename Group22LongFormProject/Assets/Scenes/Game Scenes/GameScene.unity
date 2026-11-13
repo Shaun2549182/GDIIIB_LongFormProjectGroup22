@@ -1777,12 +1777,9 @@ MonoBehaviour:
   sharedPlaceAnchor: {fileID: 0}
   act2CharacterAnchor: {fileID: 0}
   act3CharacterAnchor: {fileID: 0}
-  act3PlaceAnchor: {fileID: 0}
   mappings:
   - wordText: Emma
     visualPrefab: {fileID: 999275994041010850, guid: b3a339a90b794674da28cf6bdee251f7, type: 3}
-  - wordText: Ben
-    visualPrefab: {fileID: 1453727650522048328, guid: 245c4005cce73834e9c7b49ae768b8ec, type: 3}
   - wordText: Liam
     visualPrefab: {fileID: 8938865629821091100, guid: 3562651bc017bea4a8b2432e5960c769, type: 3}
   - wordText: Officer
@@ -1790,83 +1787,59 @@ MonoBehaviour:
   - wordText: Baker
     visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
   - wordText: Princess
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: a94d2674c6e9a2846ad3747ce761fccd, type: 3}
   - wordText: Warehouse
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 07f46dc0bea46464ebe17f9b98a755c0, type: 3}
   - wordText: Watchtower
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: a94d2674c6e9a2846ad3747ce761fccd, type: 3}
   - wordText: Dungeon
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 6b629e75c43a83740ba307d17449ff81, type: 3}
   - wordText: Artifact
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 5d406d23f2c8e414fba917ecb4f51bf0, type: 3}
   - wordText: Flare
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: f7e92053366af5c4ab59fa7d301736eb, type: 3}
   - wordText: Key
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: b16c96222cef29442ac0ce90be71320c, type: 3}
   - wordText: Safe
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: b16c96222cef29442ac0ce90be71320c, type: 3}
   - wordText: Bedroom
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: f9b667686c3d7494b85939f907d8065f, type: 3}
   - wordText: Basement
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: c362c834a8b09b34cb2ef8f95bfb691c, type: 3}
   - wordText: Necklace
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 6098498bb0ac1c249ac23da12e7e65c4, type: 3}
   - wordText: Candle
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: e3b6f864919607a4f8ec7a45d9fc1efc, type: 3}
   - wordText: Tube
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 1963a6bf90c872f4d8c0f9f46b4c933a, type: 3}
   - wordText: Cellar
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: b8f01904fba0d124abe270c779857a9a, type: 3}
   - wordText: Pantry
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: aa35b37297e6ebc4cb28cd65e8767f41, type: 3}
   - wordText: Tunnel
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: dab0930038dfc894c8d3823d375b6751, type: 3}
   - wordText: Book
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 93017ad1f8d3d65429c7d2a0685fa3a8, type: 3}
   - wordText: Jar
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 1963a6bf90c872f4d8c0f9f46b4c933a, type: 3}
   - wordText: Lantern
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 6e8bc30f442e0084889cc6a418b10baf, type: 3}
   - wordText: Thief
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: b94dc078d98b8a74ab8b5a32c5b5dfd4, type: 3}
   - wordText: Sniper
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: d9012fc27b466ca4bb3a979ec1c8eb71, type: 3}
   - wordText: Guard
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Victorious
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Surrounded
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Ambushed
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Trapped
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: de6d313bd5ab60d4886acae768e4cbeb, type: 3}
   - wordText: Scientist
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 81df75c4ffc97424f8122be20602af71, type: 3}
   - wordText: Goblin
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Arrested
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Captured
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Released
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Saved
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Master
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Owl
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: 60f79b55a4061fe4da73d784e6482d64, type: 3}
   - wordText: Stranger
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Rescued
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Robbed
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Escaped
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
-  - wordText: Cornered
-    visualPrefab: {fileID: 928181652466080634, guid: 11447a3bcffa0ba40beb6cc19a11dbe1, type: 3}
+    visualPrefab: {fileID: 928181652466080634, guid: af3dc8ea407cd9545ba1b3e648437901, type: 3}
+  - wordText: Master
+    visualPrefab: {fileID: 928181652466080634, guid: 275351f4bb2258e47ad8d52944b874d7, type: 3}
+  - wordText: Owl
+    visualPrefab: {fileID: 928181652466080634, guid: f35be5583d98a0643acc8456b5560f0b, type: 3}
 --- !u!4 &355812973
 Transform:
   m_ObjectHideFlags: 0
@@ -6693,7 +6666,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2049536761}
   m_Layer: 0
-  m_Name: CharacterAnchor
+  m_Name: Act1CharacterAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
