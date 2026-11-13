@@ -9,6 +9,8 @@ public enum WordCategory
 
 public static class SentenceEvents
 {
+    public static bool IsSentenceComplete { get; private set; } = false;
+
     // Events
     public static event Action<string> OnSentenceInit;
     public static event Action OnSentenceConstructionComplete;
@@ -17,11 +19,13 @@ public static class SentenceEvents
     // Triggers
     public static void TriggerSentenceInit(string template)
     {
+        IsSentenceComplete = false;
         OnSentenceInit?.Invoke(template);
     }
 
     public static void TriggerSentenceConstructionComplete()
     {
+        IsSentenceComplete = true;
         OnSentenceConstructionComplete?.Invoke();
     }
 

@@ -262,8 +262,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.24963333, g: 0.27377543, b: 0.3283019, a: 1}
+  m_Sprite: {fileID: -6321395503310867512, guid: d6fe1b0e8ecd51341a7ccf3c148d7c3a, type: 3}
+  m_Color: {r: 0.4627451, g: 0.4627451, b: 0.4627451, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -283,7 +283,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -6.5124207, y: 1.405704, z: -1869.6846}
-  m_LocalScale: {x: 4.43, y: 5.6, z: 1}
+  m_LocalScale: {x: 0.53481704, y: 0.79334354, z: 0.12319}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 225227613}
@@ -326,7 +326,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 63, y: -64.28783}
+  m_AnchoredPosition: {x: 445, y: -64.28783}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &66652905
@@ -1111,8 +1111,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: That's not quite right...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
+  m_sharedMaterial: {fileID: 5850367596265558407, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1903,8 +1903,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0.2982233, b: 0.554717, a: 1}
+  m_Sprite: {fileID: -6321395503310867512, guid: d6fe1b0e8ecd51341a7ccf3c148d7c3a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1924,7 +1924,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -6.5124207, y: -3.4942958, z: -1870.6146}
-  m_LocalScale: {x: 4.43, y: 4, z: 1}
+  m_LocalScale: {x: 0.51441157, y: 0.5785006, z: 0.11612}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 225227613}
@@ -1959,6 +1959,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 954882713}
+  - {fileID: 1484334929}
   - {fileID: 1969757159}
   m_Father: {fileID: 1665632798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2339,7 +2340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5774886367912992045, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: wordText
-      value: here
+      value: Here
       objectReference: {fileID: 0}
     - target: {fileID: 5774886367912992045, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: labelText
@@ -2503,7 +2504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   draggableWordBoxPrefab: {fileID: 6645465648927628223, guid: 74c3208351d08574dbf3239bfab1fef7, type: 3}
   spawnAnchor: {fileID: 604170725}
-  horizontalVariance: 60
+  horizontalVariance: 10
   verticalDropOffset: 25
 --- !u!224 &942781639
 RectTransform:
@@ -2563,8 +2564,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000015258789}
-  m_SizeDelta: {x: 280.28, y: 50}
+  m_AnchoredPosition: {x: -52.49, y: -0.000015258789}
+  m_SizeDelta: {x: 175.3, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &954882714
 MonoBehaviour:
@@ -2603,8 +2604,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 7
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
+  m_sharedMaterial: {fileID: 5850367596265558407, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2979,8 +2980,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.15754971, g: 0.13924523, b: 0.4641509, a: 1}
+  m_Sprite: {fileID: -6321395503310867512, guid: d6fe1b0e8ecd51341a7ccf3c148d7c3a, type: 3}
+  m_Color: {r: 0.4627451, g: 0.4627451, b: 0.4641509, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3000,7 +3001,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.25, y: -2.8500001, z: 0}
-  m_LocalScale: {x: 13, y: 4, z: 1}
+  m_LocalScale: {x: 1.524042, y: 0.573144, z: 0.13026}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -3067,8 +3068,8 @@ MonoBehaviour:
     move the paddle with [A] and [D]. I'll collect the words with the paddle as well.
     For now I'll let myself have unlimited tries at getting both words.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
+  m_sharedMaterial: {fileID: 5850367596265558407, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3361,8 +3362,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Next
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
+  m_sharedMaterial: {fileID: 5850367596265558407, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3473,7 +3474,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 100, y: 60}
+  m_AnchoredPosition: {x: 100, y: 103}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1262800488
@@ -3854,8 +3855,8 @@ MonoBehaviour:
     spaces I wrote earlier. I'll need to make sure I get a word for both slots otherwise
     I'll end up with writer's block...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
+  m_sharedMaterial: {fileID: 5850367596265558407, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4178,6 +4179,81 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1484334928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1484334929}
+  - component: {fileID: 1484334931}
+  - component: {fileID: 1484334930}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1484334929
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484334928}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 666243883}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -127.2, y: 6.65}
+  m_SizeDelta: {x: 175.3, y: 36.7}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1484334930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484334928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.13207549, g: 0.12135993, b: 0.12135993, a: 0.44705883}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1484334931
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484334928}
+  m_CullTransparentMesh: 1
 --- !u!1 &1533249966
 GameObject:
   m_ObjectHideFlags: 0
@@ -4212,7 +4288,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 60, y: 50}
+  m_AnchoredPosition: {x: 39, y: 13.8}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1533249968
@@ -4238,8 +4314,8 @@ MonoBehaviour:
   m_text: Hmmm, I'll start by making a basic sentence outline with some spaces for
     words.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
+  m_sharedMaterial: {fileID: 5850367596265558407, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4934,7 +5010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5774886367912992045, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: wordText
-      value: there
+      value: There
       objectReference: {fileID: 0}
     - target: {fileID: 5774886367912992045, guid: cd7ada7eb6124214fb785675485e74c0, type: 3}
       propertyPath: labelText
@@ -5121,8 +5197,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1668398299
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5144,7 +5220,7 @@ Transform:
   m_GameObject: {fileID: 1890243807}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.52, y: -0.37, z: 0}
+  m_LocalPosition: {x: -4.896, y: -1.447, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5208,8 +5284,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1668398299
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5231,7 +5307,7 @@ Transform:
   m_GameObject: {fileID: 1905115266}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.2588191, w: 0.9659258}
-  m_LocalPosition: {x: -2.65, y: 0.17, z: 0}
+  m_LocalPosition: {x: -4.083, y: -0.958, z: 0}
   m_LocalScale: {x: 2, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5273,7 +5349,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 193.15, y: 0}
+  m_AnchoredPosition: {x: 204, y: -78}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1934733014
@@ -5417,8 +5493,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 999
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
+  m_sharedMaterial: {fileID: 5850367596265558407, guid: b1aff1f501b7ed24e8969264bf5c539b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5716,7 +5792,6 @@ MonoBehaviour:
   sentenceBoxSprite: {fileID: 1100216133}
   sentenceContentGroup: {fileID: 1242983687}
   collectionBoxGroup: {fileID: 0}
-  lockInButtonGroup: {fileID: 1438052054}
   tutorialAssemblyTemplate: I'll place some words {Character} and {Place} and press
     start when I want to collect the words for the spaces.
   arcadeUIGroup: {fileID: 666243884}
@@ -5725,6 +5800,8 @@ MonoBehaviour:
   postArcadeInstructionsGroup: {fileID: 1406800468}
   triangleSprite: {fileID: 1890243808}
   rectangleSprite: {fileID: 1905115267}
+  extraPostArcadeUIGroups: []
+  extraPostArcadeSprites: []
   fadeDuration: 0.5
   delayBetweenFades: 0.15
 --- !u!4 &2081204410

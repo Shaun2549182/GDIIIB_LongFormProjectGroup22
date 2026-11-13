@@ -7,22 +7,30 @@ using UnityEngine.SceneManagement;
 public struct WordVisualMapping
 {
     public string wordText;
-    public GameObject visualPrefab; // Visual prefab / model / sprite container
+    public GameObject visualPrefab;
 }
 
 public class WordVisualManager : MonoBehaviour
 {
     public static WordVisualManager Instance { get; private set; }
 
-    [Header("Main Scene Display Anchors")]
-    [SerializeField] private Transform characterSceneAnchor;
-    [SerializeField] private Transform placeSceneAnchor;
+    [Header("Act 1 & Shared Location Anchors")]
+    [SerializeField] private Transform act1CharacterAnchor;
+    [SerializeField] private Transform sharedPlaceAnchor; // Shared by Act 1 Place & Act 2 Place
+
+    [Header("Act 2 Character Anchor (Discovered Item)")]
+    [SerializeField] private Transform act2CharacterAnchor;
+
+    [Header("Act 3 Anchors")]
+    [SerializeField] private Transform act3CharacterAnchor;
+    [SerializeField] private Transform act3PlaceAnchor;
 
     [Header("Word to Sprite Prefab Mappings")]
-    [SerializeField] private List<WordVisualMapping> mappings;
+    [SerializeField] private List<WordVisualMapping> mappings = new List<WordVisualMapping>();
 
     private Dictionary<string, GameObject> mappingDict;
-    private Dictionary<WordCategory, GameObject> activeInstances = new Dictionary<WordCategory, GameObject>();
+    private readonly Dictionary<(int act, WordCategory category), GameObject> activeInstances =
+        new Dictionary<(int act, WordCategory category), GameObject>();
 
     private void Awake()
     {
@@ -45,52 +53,80 @@ public class WordVisualManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 1. Clear references to destroyed instances from previous scene
         activeInstances.Clear();
-
-        // 2. Locate anchors in the newly loaded scene
         RebindSceneAnchors();
-
-        // 3. Automatically restore Act 1 selections in Act 2 scenes or display scenes
         RestorePersistedVisuals();
     }
 
     /// <summary>
-    /// Searches the active scene hierarchy for GameObjects named "CharacterAnchor" and "PlaceAnchor"
+    /// Locates scene anchor GameObjects in the active hierarchy.
     /// </summary>
     public void RebindSceneAnchors()
     {
-        GameObject charObj = GameObject.Find("CharacterAnchor");
-        if (charObj != null)
-        {
-            characterSceneAnchor = charObj.transform;
-        }
+        // Act 1 Character Anchor
+        GameObject a1Char = GameObject.Find("Act1CharacterAnchor") ?? GameObject.Find("CharacterAnchor");
+        if (a1Char != null) act1CharacterAnchor = a1Char.transform;
 
-        GameObject placeObj = GameObject.Find("PlaceAnchor");
-        if (placeObj != null)
-        {
-            placeSceneAnchor = placeObj.transform;
-        }
+        // Shared Place Anchor (used by both Act 1 Place and Act 2 Location)
+        GameObject placeObj = GameObject.Find("PlaceAnchor")
+            ?? GameObject.Find("Act1PlaceAnchor")
+            ?? GameObject.Find("SharedPlaceAnchor");
+        if (placeObj != null) sharedPlaceAnchor = placeObj.transform;
+
+        // Act 2 Character Anchor (Discovered Item)
+        GameObject a2Char = GameObject.Find("Act2CharacterAnchor");
+        if (a2Char != null) act2CharacterAnchor = a2Char.transform;
+
+        // Act 3 Anchors
+        GameObject a3Char = GameObject.Find("Act3CharacterAnchor");
+        if (a3Char != null) act3CharacterAnchor = a3Char.transform;
+
+        GameObject a3Place = GameObject.Find("Act3PlaceAnchor");
+        if (a3Place != null) act3PlaceAnchor = a3Place.transform;
     }
 
     /// <summary>
-    /// Re-instantiates saved character and place visual prefabs when transitioning across scenes or acts.
+    /// Restores sprites across acts, using the Act 2 location on the shared Place anchor when chosen,
+    /// or falling back to the Act 1 location if Act 2's location slot is empty.
     /// </summary>
     public void RestorePersistedVisuals()
     {
         if (GameManager.Instance == null) return;
 
-        string savedCharacter = GameManager.Instance.SelectedCharacterWord;
-        string savedPlace = GameManager.Instance.SelectedPlaceWord;
+        int currentAct = GameManager.Instance.CurrentAct;
 
-        if (!string.IsNullOrEmpty(savedCharacter) && characterSceneAnchor != null)
+        // 1. Act 1 Character
+        SpawnIfPresent(GameManager.Instance.SelectedCharacterWord, WordCategory.Character, 1);
+
+        // 2. Shared Place Anchor (Act 2 Location overrides Act 1 Location once selected)
+        string activePlaceWord = (currentAct >= 2 && !string.IsNullOrEmpty(GameManager.Instance.Act2SelectedPlaceWord))
+            ? GameManager.Instance.Act2SelectedPlaceWord
+            : GameManager.Instance.SelectedPlaceWord;
+
+        SpawnIfPresent(activePlaceWord, WordCategory.Place, 1);
+
+        // 3. Act 2 Character (Discovered Item)
+        if (currentAct >= 2)
         {
-            SpawnVisualAtAnchor(savedCharacter, WordCategory.Character, characterSceneAnchor);
+            SpawnIfPresent(GameManager.Instance.Act2SelectedCharacterWord, WordCategory.Character, 2);
         }
 
-        if (!string.IsNullOrEmpty(savedPlace) && placeSceneAnchor != null)
+        // 4. Act 3 Character & Outcome
+        if (currentAct >= 3)
         {
-            SpawnVisualAtAnchor(savedPlace, WordCategory.Place, placeSceneAnchor);
+            SpawnIfPresent(GameManager.Instance.Act3SelectedCharacterWord, WordCategory.Character, 3);
+            SpawnIfPresent(GameManager.Instance.Act3SelectedPlaceWord, WordCategory.Place, 3);
+        }
+    }
+
+    private void SpawnIfPresent(string word, WordCategory category, int visualSlotAct)
+    {
+        if (string.IsNullOrEmpty(word)) return;
+
+        Transform anchor = GetAnchorForSlot(visualSlotAct, category);
+        if (anchor != null)
+        {
+            SpawnVisualAtAnchor(word, category, anchor, isDisplayPhase: false, act: visualSlotAct);
         }
     }
 
@@ -115,12 +151,9 @@ public class WordVisualManager : MonoBehaviour
         return prefab;
     }
 
-
-    
-
-    public GameObject SpawnVisualAtAnchor(string word, WordCategory category, Transform targetAnchor, bool isDisplayPhase = false)
+    public GameObject SpawnVisualAtAnchor(string word, WordCategory category, Transform targetAnchor, bool isDisplayPhase = false, int act = 1)
     {
-        ClearCategoryVisual(category);
+        DestroyVisualInstance(category, act);
 
         if (targetAnchor == null || string.IsNullOrEmpty(word) || word == "No words found")
         {
@@ -139,25 +172,50 @@ public class WordVisualManager : MonoBehaviour
         instance.transform.localRotation = Quaternion.identity;
         instance.transform.localScale = Vector3.one;
 
-        activeInstances[category] = instance;
+        activeInstances[(act, category)] = instance;
         return instance;
     }
 
     public void UpdateCategoryVisual(WordCategory category, string word)
     {
-        Transform targetAnchor = GetAnchorForCategory(category);
-        SpawnVisualAtAnchor(word, category, targetAnchor, isDisplayPhase: false);
+        int currentAct = GameManager.Instance != null ? GameManager.Instance.CurrentAct : 1;
+
+        // Route Act 2 Place words to the same shared Place anchor (slot key 1)
+        int visualSlotAct = (category == WordCategory.Place && currentAct == 2) ? 1 : currentAct;
+
+        Transform targetAnchor = GetAnchorForSlot(visualSlotAct, category);
+        SpawnVisualAtAnchor(word, category, targetAnchor, isDisplayPhase: false, act: visualSlotAct);
     }
 
-    public void ClearCategoryVisual(WordCategory category)
+    public void ClearCategoryVisual(WordCategory category, int act = -1)
     {
-        if (activeInstances.TryGetValue(category, out GameObject existingObj))
+        int currentAct = GameManager.Instance != null ? GameManager.Instance.CurrentAct : 1;
+        int targetAct = act < 0 ? currentAct : act;
+        int visualSlotAct = (category == WordCategory.Place && targetAct == 2) ? 1 : targetAct;
+
+        DestroyVisualInstance(category, visualSlotAct);
+
+        // If the Act 2 Place word was removed from its slot, revert the shared anchor to Act 1's Place word
+        if (act < 0 && currentAct == 2 && category == WordCategory.Place && GameManager.Instance != null)
+        {
+            string act1Place = GameManager.Instance.SelectedPlaceWord;
+            if (!string.IsNullOrEmpty(act1Place))
+            {
+                SpawnIfPresent(act1Place, WordCategory.Place, 1);
+            }
+        }
+    }
+
+    private void DestroyVisualInstance(WordCategory category, int visualSlotAct)
+    {
+        var key = (visualSlotAct, category);
+        if (activeInstances.TryGetValue(key, out GameObject existingObj))
         {
             if (existingObj != null)
             {
                 Destroy(existingObj);
             }
-            activeInstances.Remove(category);
+            activeInstances.Remove(key);
         }
     }
 
@@ -170,22 +228,33 @@ public class WordVisualManager : MonoBehaviour
         activeInstances.Clear();
     }
 
-    private Transform GetAnchorForCategory(WordCategory category)
+    private Transform GetAnchorForSlot(int visualSlotAct, WordCategory category)
     {
-        if ((category == WordCategory.Character && characterSceneAnchor == null) ||
-            (category == WordCategory.Place && placeSceneAnchor == null))
-        {
-            RebindSceneAnchors();
-        }
+        RebindIfMissing(visualSlotAct, category);
 
-        switch (category)
+        return (visualSlotAct, category) switch
         {
-            case WordCategory.Character:
-                return characterSceneAnchor;
-            case WordCategory.Place:
-                return placeSceneAnchor;
-            default:
-                return null;
-        }
+            (1, WordCategory.Character) => act1CharacterAnchor,
+            (1, WordCategory.Place) => sharedPlaceAnchor,
+            (2, WordCategory.Character) => act2CharacterAnchor,
+            (3, WordCategory.Character) => act3CharacterAnchor,
+            (3, WordCategory.Place) => act3PlaceAnchor,
+            _ => null
+        };
+    }
+
+    private void RebindIfMissing(int visualSlotAct, WordCategory category)
+    {
+        bool missing = (visualSlotAct, category) switch
+        {
+            (1, WordCategory.Character) => act1CharacterAnchor == null,
+            (1, WordCategory.Place) => sharedPlaceAnchor == null,
+            (2, WordCategory.Character) => act2CharacterAnchor == null,
+            (3, WordCategory.Character) => act3CharacterAnchor == null,
+            (3, WordCategory.Place) => act3PlaceAnchor == null,
+            _ => false
+        };
+
+        if (missing) RebindSceneAnchors();
     }
 }

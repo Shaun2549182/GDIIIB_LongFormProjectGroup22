@@ -23,9 +23,9 @@ public class DeathZone : MonoBehaviour
 
             lifeManager?.OnBallFell();
         }
-        else if (collision.GetComponent<FallingWordItem>() != null)
+        else if (collision.TryGetComponent<FallingWordItem>(out var fallingWord))
         {
-            Destroy(collision.gameObject);
+            fallingWord.CollectOrDestroy(collected: false);
         }
     }
 }
