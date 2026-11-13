@@ -16,9 +16,66 @@ public class Brick : MonoBehaviour
     [SerializeField] private GameObject fallingWordPrefab;
     [SerializeField] private GameObject destroyParticlePrefab;
 
+    private Vector3 originalScale;
+    private bool hasCachedScale = false;
+
     public BrickType GetBrickType() => brickType;
     public WordCategory GetCategory() => wordCategory;
     public string GetWordText() => wordText;
+
+    private void Awake()
+    {
+        CacheOriginalScale();
+    }
+
+    private void Start()
+    {
+        ApplyLocationScaleModifier();
+    }
+
+    private void OnEnable()
+    {
+        SentenceEvents.OnSlotUpdated += HandleSlotUpdated;
+        GameManager.OnPhaseChanged += HandlePhaseChanged;
+
+        ApplyLocationScaleModifier();
+    }
+
+    private void OnDisable()
+    {
+        SentenceEvents.OnSlotUpdated -= HandleSlotUpdated;
+        GameManager.OnPhaseChanged -= HandlePhaseChanged;
+    }
+
+    private void CacheOriginalScale()
+    {
+        if (!hasCachedScale)
+        {
+            originalScale = transform.localScale;
+            hasCachedScale = true;
+        }
+    }
+
+    private void HandleSlotUpdated(WordCategory category, string word)
+    {
+        ApplyLocationScaleModifier();
+    }
+
+    private void HandlePhaseChanged(GamePhase newPhase)
+    {
+        ApplyLocationScaleModifier();
+    }
+
+    public void ApplyLocationScaleModifier()
+    {
+        CacheOriginalScale();
+
+        float multiplier = GameManager.Instance != null
+            ? GameManager.Instance.GetAct2LocationBrickScaleMultiplier()
+            : 1f;
+
+        transform.localScale = originalScale * multiplier;
+    }
 
     private void OnValidate()
     {
@@ -35,6 +92,7 @@ public class Brick : MonoBehaviour
         wordCategory = category;
         UpdateLabel();
         gameObject.SetActive(true);
+        ApplyLocationScaleModifier();
     }
 
     private void UpdateLabel()
@@ -69,7 +127,7 @@ public class Brick : MonoBehaviour
         if (destroyParticlePrefab != null)
         {
             GameObject particles = Instantiate(destroyParticlePrefab, transform.position, Quaternion.identity);
-            Destroy(particles, 2f); // Automatically removes the particle object from scene after 2 seconds
+            Destroy(particles, 2f);
         }
 
         // 2. Spawn Falling Word Pickup (Word Bricks Only)
@@ -84,7 +142,7 @@ public class Brick : MonoBehaviour
             }
         }
 
-        // 3. Destroy Brick GameObject
+        // 3. Deactivate Brick GameObject
         gameObject.SetActive(false);
     }
 
